@@ -20,6 +20,8 @@ class LaravelPhotoGalleryServiceProvider extends ServiceProvider {
 	{
 		$this->package('jeroen-g/laravel-photo-gallery');
 
+		\View::addNamespace('gallery', __DIR__.'/../../views');
+
 		include __DIR__.'/../../routes.php';
 	}
 
