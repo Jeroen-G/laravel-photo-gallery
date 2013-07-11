@@ -20,6 +20,8 @@ class LaravelPhotoGalleryServiceProvider extends ServiceProvider {
 	{
 		$this->package('jeroen-g/laravel-photo-gallery');
 
+		// Views will first be sought in app/views/gallery before the package view is used.
+		\View::addNamespace('gallery', app_path().'/views/gallery');
 		\View::addNamespace('gallery', __DIR__.'/../../views');
 
 		include __DIR__.'/../../routes.php';
