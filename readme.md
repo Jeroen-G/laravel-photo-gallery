@@ -17,7 +17,11 @@ Next, update Composer via the command line:
 
 The next step is to add the service provider in `app/config/app.php`:
 
-    'JeroenG\LaravelPhotoGallery\LaravelPhotoGalleryServiceProvider'
+    'JeroenG\LaravelPhotoGallery\LaravelPhotoGalleryServiceProvider',
+
+In the same file, add the following to the aliases array (so you can use the facade):
+
+	'Gallery'		=>		'JeroenG\LaravelPhotoGallery\Facades\Gallery',
 
 The last thing to do is to migrate:
 

@@ -19,6 +19,8 @@ class LaravelPhotoGalleryServiceProvider extends ServiceProvider {
 	public function boot()
 	{
 		$this->package('jeroen-g/laravel-photo-gallery');
+
+		include __DIR__.'/../../routes.php';
 	}
 
 	/**
@@ -28,7 +30,10 @@ class LaravelPhotoGalleryServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		//
+		$this->app->bind('gallery', function()
+        {
+            return new Gallery;
+        });
 	}
 
 	/**
@@ -38,7 +43,7 @@ class LaravelPhotoGalleryServiceProvider extends ServiceProvider {
 	 */
 	public function provides()
 	{
-		return array();
+		return array('gallery');
 	}
 
 }
