@@ -18,8 +18,8 @@ class CreatePhotosTable extends Migration {
 			$table->string('photo_name');
 			$table->string('photo_description')->nullable();
 			$table->string('photo_path');
-			$table->integer('album_id_fk')->unsigned();
-			$table->foreign('album_id_fk')->references('album_id')->on('albums');
+			$table->integer('album_id')->unsigned();
+			$table->foreign('album_id')->references('album_id')->on('albums');
 			$table->timestamps();
 		});
 	}
