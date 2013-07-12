@@ -10,7 +10,7 @@ class Album extends \Eloquent {
 
     public function photos()
     {
-    	return $this->hasMany('Photo');
+    	return $this->hasMany('\JeroenG\LaravelPhotoGallery\Models\Photo');
     }
 
 }

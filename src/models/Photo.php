@@ -12,7 +12,7 @@ class Photo extends \Eloquent {
 
     public function album()
     {
-    	return $this->belongsTo('Album');
+    	return $this->belongsTo('\JeroenG\LaravelPhotoGallery\Models\Album');
     }
 
 }
