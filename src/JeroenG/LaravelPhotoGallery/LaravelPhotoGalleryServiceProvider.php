@@ -24,6 +24,9 @@ class LaravelPhotoGalleryServiceProvider extends ServiceProvider {
 		\View::addNamespace('gallery', app_path().'/views/gallery');
 		\View::addNamespace('gallery', __DIR__.'/../../views');
 
+		// Shortcut for using the gallery language lines.
+		\Lang::addNamespace('gallery', __DIR__.'/../../lang');
+
 		include __DIR__.'/../../routes.php';
 	}
 
