@@ -30,8 +30,8 @@ return array(
 	'update'	=>	'Aanpassen',
 	'cancel'	=>	'Annuleren',
 	'errors'	=>	'Er zijn fouten gevonden',
-	'albumnum'	=> 	'Album nummer',
 	'album'		=>	'Album',
 	'addalbum'	=>	'Album toevoegen',
+	'name'		=>	'Naam',
 
 );

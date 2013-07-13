@@ -16,7 +16,7 @@ return array(
 	'all'	 	=> 	'All photos',
 	'add'		=>	'Add new photo',
 	'none'		=>	'There are no photos',
-	'create'	=>	'Add photo',
+	'create'	=>	'Add',
 	'path'		=>	'File',
 	'desc'		=>	'Description',
 	'submit'	=>	'Submit',
@@ -27,8 +27,8 @@ return array(
 	'update'	=>	'Update',
 	'cancel'	=>	'Cancel',
 	'errors'	=>	'There were some errors',
-	'albumnum'	=> 	'Album number',
 	'album'		=>	'Album',
 	'addalbum'  =>	'Add album',
+	'name'		=>	'Name',
 
 );
