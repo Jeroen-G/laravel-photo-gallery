@@ -8,6 +8,11 @@ class Album extends \Eloquent {
 
     protected $guarded = array();
 
+    public $rules = array(
+    		'album_name' => 'required',
+            'album_description' => 'max:255',
+    	);
+
     public function photos()
     {
     	return $this->hasMany('\JeroenG\LaravelPhotoGallery\Models\Photo');
