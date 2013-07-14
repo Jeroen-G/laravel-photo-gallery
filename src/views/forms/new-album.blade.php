@@ -12,7 +12,6 @@
 
         <li>
             {{ Form::submit(Lang::get('gallery::gallery.submit'), array('class' => 'btn')) }}
-            {{ link_to_route('gallery/album', Lang::get('gallery::gallery.cancel'), $album->id, array('class' => 'btn')) }}
         </li>
     </ul>
 {{ Form::close() }}
