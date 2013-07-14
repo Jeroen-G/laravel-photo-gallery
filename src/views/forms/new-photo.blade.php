@@ -11,7 +11,7 @@
         </li>
 
         <li>
-            {{ Form::label('album_id', Lang::get('gallery::gallery.album') . ':') }}
+            {{ Form::label('album_id', Lang::choice('gallery::gallery.album', 1) . ':') }}
             {{ Form::select('album_id', $dropdown) }}
         </li>
 
