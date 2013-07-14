@@ -11,9 +11,9 @@ class Photo extends \Eloquent {
     protected $touches = array('Album');
 
     public $rules = array(
-    		'path' => 'image|required',
-    		'album' => 'required',
-            'description' => 'max:255',
+    		'photo_path' => 'image|required',
+    		'album_id' => 'required',
+            'photo_description' => 'max:255',
     	);
 
     public function album()
