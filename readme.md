@@ -30,3 +30,4 @@ The last thing to do is to migrate:
 This will create the tables for the gallery. Now you're ready to start!
 
 ## Usage
+The photos will be uploaded to the folder `public/uploads/photos/` so make sure that it exists.
