@@ -32,8 +32,9 @@ class GalleryController extends BaseController {
 	 **/
 	public function getAlbum($id)
 	{
-		$albumPhotos = $this->album->findOrFail($id)->photos;
-		$this->layout->content = \View::make('gallery::album', array('albumPhotos' => $albumPhotos));
+		$album = $this->album->findOrFail($id);
+		$albumPhotos = $album->photos;
+		$this->layout->content = \View::make('gallery::album', array('album' => $album, 'albumPhotos' => $albumPhotos));
 	}
 
 	/**
@@ -141,23 +142,29 @@ class GalleryController extends BaseController {
 
 		if($validator->passes())
 		{
-			$file = \Input::file('path')->getClientOriginalName();
+			$filename = str_random(4) . \Input::file('photo_path')->getClientOriginalName();
+			$destination = "uploads/photos/";
+			$upload = \Input::file('photo_path')->move($destination, $filename);
+
+			if( $upload == false )
+			{
+				return \Redirect::to('gallery/new/photo')
+       			->withInput()->withErrors($validator)->with('message', \Lang::get('validation.errors'));
+			}
+
 			//$this->photo->create(array('photo_name' => $input['name'], 'photo_description' => $input['description'], 'photo_path' => $file));
 
 			$newPhoto = new \JeroenG\LaravelPhotoGallery\Models\Photo;
 			$newPhoto->photo_name = $input['photo_name'];
 			$newPhoto->photo_description = $input['photo_description'];
-			$newPhoto->photo_path = $file;
+			$newPhoto->photo_path = $filename;
 			$newPhoto->album_id = $input['album_id'];
 			$newPhoto->save();
 
 			return \Redirect::to('gallery');
 		}
-		else
-		{
-			return \Redirect::to('gallery/new/photo')
-            ->withInput()->withErrors($validator)->with('message', \Lang::get('validation.errors'));
-		}
+		return \Redirect::to('gallery/new/photo')
+       	->withInput()->withErrors($validator)->with('message', \Lang::get('validation.errors'));
 	}
 
 	/**
@@ -210,5 +217,43 @@ class GalleryController extends BaseController {
         	return \Redirect::to('gallery/edit/photo/' . $id)
             ->withInput()->withErrors($validator)->with('message', \Lang::get('validation.errors'));
         }
+	}
+
+	/**
+	 * Methods for deleting
+     **/
+
+	/**
+	 * Deleting an album
+	 *
+	 **/
+	public function deleteAlbum ($id)
+	{
+		$album = $this->album->find($id);
+		$albumPhotos = $album->photos;
+		
+		foreach ($albumPhotos as $photo) {
+			$this->deletePhoto($photo->photo_id);
+		}
+
+		$album->delete();
+
+		return \Redirect::to('gallery');
+	}
+
+	/**
+	 * Deleting a photo
+	 *
+	 **/
+	public function deletePhoto ($id)
+	{
+		$photo = $this->photo->find($id);
+		$album = $photo->album_id;
+        $file = "uploads/photos/" . $photo->photo_path;
+        
+        unlink($file);
+        $photo->delete();
+
+        return \Redirect::to("gallery/album/$album");
 	}
 }
