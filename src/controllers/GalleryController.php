@@ -59,6 +59,12 @@ class GalleryController extends BaseController {
 		}
 		elseif ($type == 'photo') {
 			$albumArray = $this->album->all()->toArray();
+			$dropdown[0] = '';
+
+			if (empty($albumArray)) {
+				$dropdown[0] = \Lang::get('gallery::gallery.none') . \Lang::choice('gallery::gallery.album', 2);
+			}
+
 			foreach ($albumArray as $album) {
 			    $dropdown[$album['album_id']] = $album['album_name'];
 			}
