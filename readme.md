@@ -27,3 +27,4 @@ This will create the tables for the gallery. Now you're ready to start!
 
 ## Usage
 The photos will be uploaded to the folder `public/uploads/photos/` so make sure that it exists.
+If you want to change the way the gallery looks you can create a file with the same name in 'app/views/gallery`. For example, if you want to change the master layout, you should creat the file `app/views/gallery/layouts/master.blade.php`.

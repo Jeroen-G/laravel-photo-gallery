@@ -2,10 +2,27 @@
 
 class GalleryController extends BaseController {
 
+	/**
+	 * The album model
+	 *
+	 * @var \JeroenG\LaravelPhotoGallery\Models\Album
+	 **/
 	protected $album;
 
+	/**
+	 * The photo model
+	 *
+	 * @var \JeroenG\LaravelPhotoGallery\Models\Photo
+	 **/
 	protected $photo;
 
+	/**
+	 * Instantiate the controller
+	 *
+	 * @param \JeroenG\LaravelPhotoGallery\Models\Album $album
+	 * @param \JeroenG\LaravelPhotoGallery\Models\Photo $photo
+	 * @return void
+	 **/
 	public function __construct(\JeroenG\LaravelPhotoGallery\Models\Album $album, \JeroenG\LaravelPhotoGallery\Models\Photo $photo)
     {
         $this->album = $album;
@@ -19,6 +36,7 @@ class GalleryController extends BaseController {
 	/**
 	 * Listing all albums
 	 *
+	 * @return \Illuminate\View\View
 	 **/
 	public function getIndex()
 	{
@@ -29,6 +47,8 @@ class GalleryController extends BaseController {
 	/**
 	 * Showing photos in one album
 	 *
+	 * @param int $id Id of the album
+	 * @return \Illuminate\View\View
 	 **/
 	public function getAlbum($id)
 	{
@@ -41,6 +61,8 @@ class GalleryController extends BaseController {
 	/**
 	 * Showing a single photo
 	 *
+	 * @param int $id Id of the photo
+	 * @return \Illuminate\View\View
 	 **/
 	public function getPhoto($id)
 	{
@@ -51,6 +73,8 @@ class GalleryController extends BaseController {
 	/**
 	 * Showing the form for creating an album or photo
 	 *
+	 * @param string $type Either 'album' or 'photo'
+	 * @return \Illuminate\View\View
 	 **/
 	public function getNew($type = 'photo')
 	{
@@ -78,6 +102,9 @@ class GalleryController extends BaseController {
 /**
 	 * Showing the form for editing an album or photo
 	 *
+	 * @param string $type Either 'album' or 'photo'
+	 * @param int $id Id of the album or photo
+	 * @return \Illuminate\View\View
 	 **/
 	public function getEdit($type = 'photo', $id)
 	{
@@ -117,6 +144,7 @@ class GalleryController extends BaseController {
 	/**
 	 * Adding an album
 	 *
+	 * @return \Illuminate\View\View
 	 **/
 	public function postAlbum()
 	{
@@ -140,6 +168,7 @@ class GalleryController extends BaseController {
 	/**
 	 * Adding an photo
 	 *
+	 * @return \Illuminate\View\View
 	 **/
 	public function postPhoto()
 	{
@@ -181,6 +210,8 @@ class GalleryController extends BaseController {
 	/**
 	 * Updating an album
 	 *
+	 * @param int $id Id of the album
+	 * @return \Illuminate\View\View
 	 **/
 	public function putAlbum($id)
 	{
@@ -205,6 +236,8 @@ class GalleryController extends BaseController {
 	/**
 	 * Updating a photo
 	 *
+	 * @param int $id Id of the photo
+	 * @return \Illuminate\View\View
 	 **/
 	public function putPhoto($id)
 	{
@@ -233,6 +266,8 @@ class GalleryController extends BaseController {
 	/**
 	 * Deleting an album
 	 *
+	 * @param int $id Id of the album
+	 * @return \Illuminate\View\View
 	 **/
 	public function deleteAlbum ($id)
 	{
@@ -251,6 +286,8 @@ class GalleryController extends BaseController {
 	/**
 	 * Deleting a photo
 	 *
+	 * @param int $id Id of the photo
+	 * @return \Illuminate\View\View
 	 **/
 	public function deletePhoto ($id)
 	{

@@ -4,6 +4,8 @@ class BaseController extends \Illuminate\Routing\Controllers\Controller {
 
 	/**
 	 * The default layout.
+	 *
+	 * @var string
 	 */
 	protected $layout = 'gallery::layouts.master';
 
