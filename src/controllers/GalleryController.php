@@ -33,7 +33,8 @@ class GalleryController extends BaseController {
 	public function getAlbum($id)
 	{
 		$album = $this->album->findOrFail($id);
-		$albumPhotos = $album->photos;
+		$albumPhotos = $this->photo->where('album_id', '=', $id)->paginate(10);
+		//$albumPhotos = \Paginator::make($albumPhotos->toArray(), $albumPhotos->count(), 2);
 		$this->layout->content = \View::make('gallery::album', array('album' => $album, 'albumPhotos' => $albumPhotos));
 	}
 
@@ -167,7 +168,7 @@ class GalleryController extends BaseController {
 			$newPhoto->album_id = $input['album_id'];
 			$newPhoto->save();
 
-			return \Redirect::to('gallery');
+			return \Redirect::to('gallery/album/' . $input['album_id']);
 		}
 		return \Redirect::to('gallery/new/photo')
        	->withInput()->withErrors($validator)->with('message', \Lang::get('validation.errors'));

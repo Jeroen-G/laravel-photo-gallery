@@ -13,6 +13,8 @@
 			<dt><h3>{{ link_to("gallery/photo/$photo->photo_id", $photo->photo_name) }}</h3></dt>
 			<dd><p class="lead indent">{{ $photo->photo_description }}</p></dd>
 		@endforeach
+
+	<?php echo $albumPhotos->links(); ?>
 		</dl>
 
 	@else
