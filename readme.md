@@ -8,7 +8,7 @@ First you should install this package through Composer and edit your project's `
 
     "require": {
 		"laravel/framework": "4.0.*",
-		"jeroen-g/laravel-photo-gallery": "1.*"
+		"jeroen-g/laravel-photo-gallery": "v1.0"
 	}
 
 Next, update Composer via the command line:
@@ -26,6 +26,6 @@ The last thing to do is to migrate:
 This will create the tables for the gallery. Now you're ready to start!
 
 ## Usage
-The photos will be uploaded to the folder `public/uploads/photos/` so make sure that it exists.
+The photos will be uploaded to the folder `public/uploads/photos/`.
 
 If you want to change the way the gallery looks you can create a file with the same name in `app/views/gallery`. For example, if you want to change the master layout, you should creat the file `app/views/gallery/layouts/master.blade.php`.
