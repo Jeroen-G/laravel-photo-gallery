@@ -1,17 +1,21 @@
 {
-    "name": "jeroen-g/laravel-photo-gallery",
+    "name": "ReLexEd/laravel-photo-gallery",
     "description": "A photo gallery for Laravel 4",
     "license": "EUPL-1.1",
     "authors": [
         {
             "name": "Jeroen G",
             "email": "jeroeng.jeroeng@gmail.com"
+        },
+        {
+            "name": "Alex Regenbogen",
+            "email": "github@relexed.com"
         }
     ],
     "keywords": ["Laravel 4", "Photo", "Gallery"],
     "require": {
         "php": ">=5.3.0",
-        "illuminate/support": "4.0.x"
+        "illuminate/support": "4.1.x"
     },
     "autoload": {
         "classmap": [
@@ -20,7 +24,7 @@
             "src/models"
         ],
         "psr-0": {
-            "JeroenG\\LaravelPhotoGallery": "src/"
+            "ReLexEd\\LaravelPhotoGallery": "src/"
         }
     },
     "minimum-stability": "dev"
