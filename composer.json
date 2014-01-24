@@ -6,10 +6,6 @@
         {
             "name": "Jeroen G",
             "email": "jeroeng.jeroeng@gmail.com"
-        },
-        {
-            "name": "Alex Regenbogen",
-            "email": "github@relexed.com"
         }
     ],
     "keywords": ["Laravel 4", "Photo", "Gallery"],
@@ -24,7 +20,7 @@
             "src/models"
         ],
         "psr-0": {
-            "ReLexEd\\LaravelPhotoGallery": "src/"
+            "JeroenG\\LaravelPhotoGallery": "src/"
         }
     },
     "minimum-stability": "dev"
