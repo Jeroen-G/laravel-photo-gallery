@@ -23,10 +23,10 @@ class GalleryController extends BaseController {
 	 * @param \JeroenG\LaravelPhotoGallery\Models\Photo $photo
 	 * @return void
 	 **/
-	public function __construct(\JeroenG\LaravelPhotoGallery\Models\Album $album, \JeroenG\LaravelPhotoGallery\Models\Photo $photo)
+	public function __construct()
     {
-        $this->album = $album;
-        $this->photo = $photo;
+        $this->album = \App::make('Repositories\AlbumRepository');
+        $this->photo = \App::make('Repositories\PhotoRepository');
     }
 
     /**

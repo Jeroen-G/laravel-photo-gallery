@@ -37,10 +37,13 @@ class LaravelPhotoGalleryServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		$this->app->bind('gallery', function()
-        {
-            return new Gallery;
-        });
+		if (file_exists(app_path().'/bindings.php')) {
+			include app_path() . '/bindings.php';
+		}
+		else
+		{
+			include __DIR__.'/bindings.php';
+		}
 	}
 
 	/**
