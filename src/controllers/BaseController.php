@@ -1,6 +1,6 @@
 <?php namespace JeroenG\LaravelPhotoGallery\Controllers;
 
-class BaseController extends \Illuminate\Routing\Controllers\Controller {
+class BaseController extends \Illuminate\Routing\Controller {
 
 	/**
 	 * The default layout.
