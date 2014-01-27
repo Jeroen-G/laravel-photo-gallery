@@ -29,4 +29,5 @@ return array(
 	'photo'		=>	'foto|foto\'s',
 	'return'	=>	'Terug naar het album',
 	'submit'	=>	'Verstuur',
+	'success'	=>	'Het toevoegen is gelukt',
 );
