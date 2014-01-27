@@ -24,6 +24,13 @@ class Photo extends \Eloquent {
     protected $guarded = array();
 
     /**
+    *  Enabling soft deleting
+    *
+    *  @var boolean
+    **/
+     protected $softDelete = true;
+
+    /**
      * When this model is updated, the updated_at timestamp of the album is also changed
      *
      * @var array

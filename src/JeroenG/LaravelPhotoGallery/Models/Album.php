@@ -24,6 +24,13 @@ class Album extends \Eloquent {
     protected $guarded = array();
 
     /**
+    *  Enabling soft deleting
+    *
+    *  @var boolean
+    **/
+     protected $softDelete = true;
+
+    /**
      * Defining the relationship, an album could have many photos
      *
      * @return \JeroenG\LaravelPhotoGallery\Models\Photo
