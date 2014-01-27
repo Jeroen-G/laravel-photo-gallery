@@ -15,4 +15,10 @@ interface PhotoRepository {
 	public function update($id, $input);
 
 	public function delete($id);
+
+	public function forceDelete($id);
+
+	public function restore($id);
+
+	public function restoreFromAlbum($albumId);
 }

@@ -26,7 +26,7 @@ class EloquentAlbumRepository implements AlbumRepository {
 
 	public function update($id, $input)
 	{
-		$album = $this->find($id);
+		$album = Album::find($id);
 		$album->album_name = $input['album_name'];
 		$album->album_description = $input['album_description'];
 		$album->touch();
@@ -35,7 +35,7 @@ class EloquentAlbumRepository implements AlbumRepository {
 
 	public function delete($id)
 	{
-		$album = $this->find($id);
+		$album = Album::find($id);
 		$albumPhotos = $album->photos;
 		$photoRepository = \App::make('Repositories\PhotoRepository');
 
@@ -43,5 +43,25 @@ class EloquentAlbumRepository implements AlbumRepository {
 			$photoRepository->delete($photo->photo_id);
 		}
 		return $album->delete();
+	}
+
+	public function forceDelete($id)
+	{
+		$album = Album::find($id);
+		$albumPhotos = $album->photos;
+		$photoRepository = \App::make('Repositories\PhotoRepository');
+
+		foreach ($albumPhotos as $photo) {
+			$photoRepository->forceDelete($photo->photo_id);
+		}
+		return $album->forceDelete();
+	}
+
+	public function restore($id)
+	{
+		$album = Album::withTrashed()->find($id);
+		$photoRepository = \App::make('Repositories\PhotoRepository');
+		$photoRepository->restoreFromAlbum($id);
+		return $album->restore();
 	}
 }

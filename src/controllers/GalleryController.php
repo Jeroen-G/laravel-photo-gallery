@@ -293,6 +293,8 @@ class GalleryController extends BaseController {
 	 **/
 	public function deletePhoto ($id)
 	{
+		$album = $this->photo->find($id)->album->album_id;
+
         $this->photo->delete($id);
 
         return \Redirect::to("gallery/album/$album");

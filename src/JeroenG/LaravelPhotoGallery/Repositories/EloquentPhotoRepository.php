@@ -36,7 +36,7 @@ class EloquentPhotoRepository implements PhotoRepository {
 
 	public function update($id, $input)
 	{
-		$photo = $this->find($id);
+		$photo = Photo::find($id);
 		$photo->photo_name = $input['photo_name'];
 		$photo->photo_description = $input['photo_description'];
 		$photo->photo_path = $input['photo_path'];
@@ -47,9 +47,40 @@ class EloquentPhotoRepository implements PhotoRepository {
 
 	public function delete($id)
 	{
-		$photo = $this->find($id);
+		$photo = Photo::find($id);
+        $file = "uploads/photos/" . $photo->photo_path;
+        $this->hasDeletedDir();
+        rename($file, "uploads/photos/deleted/" . $photo->photo_path);
+		return $photo->delete();
+	}
+
+	public function hasDeletedDir()
+	{
+   		return is_dir("uploads/photos/deleted/") || mkdir("uploads/photos/deleted/");
+	}
+
+	public function forceDelete($id)
+	{
+		$photo = Photo::find($id);
         $file = "uploads/photos/" . $photo->photo_path;
         unlink($file);
-		return $photo->delete();
+		return $photo->forceDelete();
+	}
+
+	public function restore($id)
+	{
+		$photo = Photo::withTrashed()->find($id);
+        $deletedFile = "uploads/photos/deleted/" . $photo->photo_path;
+        rename($deletedFile, "uploads/photos/" . $photo->photo_path);
+		return $photo->restore();
+	}
+
+	public function restoreFromAlbum($albumId)
+	{
+		$albumPhotos = Photo::withTrashed()->where('album_id', $albumId)->get();
+
+		foreach ($albumPhotos as $photo) {
+			$this->restore($photo->photo_id);
+		}
 	}
 }
