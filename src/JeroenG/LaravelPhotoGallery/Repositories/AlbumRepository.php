@@ -9,4 +9,8 @@ interface AlbumRepository {
 	public function findOrFail($id);
 
 	public function create($input);
+
+	public function update($id, $input);
+
+	public function delete($id);
 }

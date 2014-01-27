@@ -24,16 +24,6 @@ class Album extends \Eloquent {
     protected $guarded = array();
 
     /**
-     * The rules for validating the input
-     *
-     * @var array
-     **/
-    public $rules = array(
-    		'album_name' => 'required',
-            'album_description' => 'max:255',
-    	);
-
-    /**
      * Defining the relationship, an album could have many photos
      *
      * @return \JeroenG\LaravelPhotoGallery\Models\Photo

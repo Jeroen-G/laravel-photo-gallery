@@ -8,7 +8,11 @@ interface PhotoRepository {
 
 	public function findOrFail($id);
 
-	public function create($input);
+	public function findByAlbumId($albumId);
 
-	public function where($first, $operator, $second);
+	public function create($input, $filename);
+
+	public function update($id, $input);
+
+	public function delete($id);
 }

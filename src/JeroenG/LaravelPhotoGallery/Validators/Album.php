@@ -1,6 +1,14 @@
 <?php namespace JeroenG\LaravelPhotoGallery\Validators;
 
-class Album extends Validator implements ValidatorInterface{
+class Album extends Validator {
 
-	public static $rules = array();
+	/**
+     * The rules for validating the input
+     *
+     * @var array
+     **/
+    public static $rules = array(
+    		'album_name' => 'required',
+            'album_description' => 'max:255',
+    	);
 }

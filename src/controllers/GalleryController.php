@@ -1,5 +1,7 @@
 <?php namespace JeroenG\LaravelPhotoGallery\Controllers;
 
+use JeroenG\LaravelPhotoGallery\Validators as Validators;
+
 class GalleryController extends BaseController {
 
 	/**
@@ -53,7 +55,7 @@ class GalleryController extends BaseController {
 	public function getAlbum($id)
 	{
 		$album = $this->album->findOrFail($id);
-		$albumPhotos = $this->photo->where('album_id', '=', $id)->paginate(10);
+		$albumPhotos = $this->photo->findByAlbumId($id)->paginate(10);
 		//$albumPhotos = \Paginator::make($albumPhotos->toArray(), $albumPhotos->count(), 2);
 		$this->layout->content = \View::make('gallery::album', array('album' => $album, 'albumPhotos' => $albumPhotos));
 	}
@@ -80,7 +82,8 @@ class GalleryController extends BaseController {
 	{
 		if ($type == 'album') {
 			$data = array('type' => 'album');
-			$this->layout->content = \View::make('gallery::new', $data)->nest('form', 'gallery::forms.new-album');
+			$this->layout->content = \View::make('gallery::new', $data)
+			->nest('form', 'gallery::forms.new-album');
 		}
 		elseif ($type == 'photo') {
 			$albumArray = $this->album->all()->toArray();
@@ -95,7 +98,8 @@ class GalleryController extends BaseController {
 			}
 
 			$data = array('type' => 'photo', 'dropdown' => $dropdown);
-			$this->layout->content = \View::make('gallery::new', $data)->nest('form', 'gallery::forms.new-photo', $data);
+			$this->layout->content = \View::make('gallery::new', $data)
+			->nest('form', 'gallery::forms.new-photo', $data);
 		}
 	}
 
@@ -117,7 +121,8 @@ class GalleryController extends BaseController {
 			}
 
 			$data = array('type' => 'album', 'album' => $album);
-			$this->layout->content = \View::make('gallery::edit', $data)->nest('form', 'gallery::forms.edit-album', $data);
+			$this->layout->content = \View::make('gallery::edit', $data)
+			->nest('form', 'gallery::forms.edit-album', $data);
 		}
 		elseif ($type == 'photo') {
 			$photo = $this->photo->find($id);
@@ -133,7 +138,8 @@ class GalleryController extends BaseController {
 			}
 
 			$data = array('type' => 'photo', 'dropdown' => $dropdown, 'photo' => $photo);
-			$this->layout->content = \View::make('gallery::edit', $data)->nest('form', 'gallery::forms.edit-photo', $data);
+			$this->layout->content = \View::make('gallery::edit', $data)
+			->nest('form', 'gallery::forms.edit-photo', $data);
 		}
 	}
 
@@ -150,18 +156,21 @@ class GalleryController extends BaseController {
 	{
 		$input = \Input::all();
 
-		$validator = \Validator::make($input, $this->album->rules);
+		$validation = new Validators\Album;
 
-		if($validator->passes())
+		if($validation->passes())
 		{
 			$this->album->create($input);
 
-			return \Redirect::to('gallery');
+			return \Redirect::to('gallery')
+			->with('flash', \Lang::get('gallery.success'));
 		}
 		else
 		{
 			return \Redirect::to('gallery/new/album')
-            ->withInput()->withErrors($validator)->with('message', \Lang::get('validation.errors'));
+            ->withInput()
+            ->withErrors($validation->errors)
+            ->with('message', \Lang::get('gallery::gallery.errors'));
 		}
 	}
 
@@ -174,33 +183,31 @@ class GalleryController extends BaseController {
 	{
 		$input = \Input::all();
 
-		$validator = \Validator::make($input, $this->photo->rules);
+		$validation = new Validators\Photo;
 
-		if($validator->passes())
+		if($validation->passes())
 		{
 			$filename = str_random(4) . \Input::file('photo_path')->getClientOriginalName();
 			$destination = "uploads/photos/";
-			$upload = \Input::file('photo_path')->move($destination, $filename);
+            $upload = \Input::file('photo_path')->move($destination, $filename);
 
 			if( $upload == false )
 			{
 				return \Redirect::to('gallery/new/photo')
-       			->withInput()->withErrors($validator)->with('message', \Lang::get('validation.errors'));
+       			->withInput()
+       			->withErrors($validation->errors)
+       			->with('message', \Lang::get('gallery::gallery.errors'));
 			}
 
-			//$this->photo->create(array('photo_name' => $input['name'], 'photo_description' => $input['description'], 'photo_path' => $file));
-
-			$newPhoto = new \JeroenG\LaravelPhotoGallery\Models\Photo;
-			$newPhoto->photo_name = $input['photo_name'];
-			$newPhoto->photo_description = $input['photo_description'];
-			$newPhoto->photo_path = $filename;
-			$newPhoto->album_id = $input['album_id'];
-			$newPhoto->save();
-
+			$this->photo->create($input, $filename);
 			return \Redirect::to('gallery/album/' . $input['album_id']);
 		}
-		return \Redirect::to('gallery/new/photo')
-       	->withInput()->withErrors($validator)->with('message', \Lang::get('validation.errors'));
+		else
+		{
+			return \Redirect::to('gallery/new/photo')
+            ->withInput()->withErrors($validation->errors)
+            ->with('message', \Lang::get('gallery::gallery.errors'));
+		}
 	}
 
 	/**
@@ -217,19 +224,20 @@ class GalleryController extends BaseController {
 	{
 		$input = \Input::except('_method');
 
-        $validator = \Validator::make($input,$this->album->rules);
+        $validation = new Validators\Album($input);
 
-        if ($validator->passes())
+        if ($validation->passes())
         {
-            $album = $this->album->find($id);
-            $album->update($input);
+            $this->album->update($id, $input);
 
             return \Redirect::to('gallery/album/' . $id);
         }
         else
         {
         	return \Redirect::to('gallery/edit/album/' . $id)
-            ->withInput()->withErrors($validator)->with('message', \Lang::get('validation.errors'));
+            ->withInput()
+            ->withErrors($validation->errors)
+            ->with('message', \Lang::get('gallery::gallery.errors'));
         }
 	}
 
@@ -243,19 +251,20 @@ class GalleryController extends BaseController {
 	{
 		$input = \Input::except('_method');
 
-        $validator = \Validator::make($input,$this->photo->rules);
+        $validation = new Validators\Photo($input);
 
-        if ($validator->passes())
+        if ($validation->passes())
         {
-            $photo = $this->photo->find($id);
-            $photo->update($input);
+            $this->photo->update($id, $input);
 
             return \Redirect::to('gallery/photo/' . $id);
         }
         else
         {
         	return \Redirect::to('gallery/edit/photo/' . $id)
-            ->withInput()->withErrors($validator)->with('message', \Lang::get('validation.errors'));
+            ->withInput()
+            ->withErrors($validation->errors)
+            ->with('message', \Lang::get('gallery::gallery.errors'));
         }
 	}
 
@@ -271,14 +280,7 @@ class GalleryController extends BaseController {
 	 **/
 	public function deleteAlbum ($id)
 	{
-		$album = $this->album->find($id);
-		$albumPhotos = $album->photos;
-		
-		foreach ($albumPhotos as $photo) {
-			$this->deletePhoto($photo->photo_id);
-		}
-
-		$album->delete();
+		$this->album->delete($id);
 
 		return \Redirect::to('gallery');
 	}
@@ -291,12 +293,7 @@ class GalleryController extends BaseController {
 	 **/
 	public function deletePhoto ($id)
 	{
-		$photo = $this->photo->find($id);
-		$album = $photo->album_id;
-        $file = "uploads/photos/" . $photo->photo_path;
-        
-        unlink($file);
-        $photo->delete();
+        $this->photo->delete($id);
 
         return \Redirect::to("gallery/album/$album");
 	}
