@@ -1,14 +1,22 @@
 @section('content')
 
-<h1>{{ Lang::get('gallery::gallery.edit') . ' ' . Lang::choice("gallery::gallery.$type", 1) }}</h1>
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <b>{{ Lang::get('gallery::gallery.edit') . ' ' . Lang::choice("gallery::gallery.$type", 1) }}</b>
+        </div>
+        <div class="panel-body">
 
-{{ $form }}
+    {{ $form }}
 
-@if ($errors->any())
-    <ul>
-        {{ implode('', $errors->all('<li class="error">:message</li>')) }}
-    </ul>
-@endif
+    @if ($errors->any())
+            <ul>
+                {{ implode('', $errors->all('<li class="error">:message</li>')) }}
+            </ul>
+    @endif
+        </div>
+    </div>
+</div>
 
 @stop
 

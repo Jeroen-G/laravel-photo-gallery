@@ -11,8 +11,8 @@
         </li>
 
         <li>
-            {{ Form::submit(Lang::get('gallery::gallery.submit'), array('class' => 'btn')) }}
-            {{ link_to("gallery/album/$album->album_id", Lang::get('gallery::gallery.cancel'), array('class' => 'btn')) }}
+            {{ Form::submit(Lang::get('gallery::gallery.submit'), array('class' => 'btn btn-primary')) }}
+            {{ link_to("gallery/album/$album->album_id", Lang::get('gallery::gallery.cancel'), array('class' => 'btn btn-default')) }}
         </li>
     </ul>
 {{ Form::close() }}
