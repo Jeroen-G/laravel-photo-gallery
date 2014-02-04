@@ -11,7 +11,7 @@
         </li>
 
         <li>
-            {{ Form::submit(Lang::get('gallery::gallery.submit'), array('class' => 'btn')) }}
+            {{ Form::submit(Lang::get('gallery::gallery.submit'), array('class' => 'btn btn-primary')) }}
         </li>
     </ul>
 {{ Form::close() }}
