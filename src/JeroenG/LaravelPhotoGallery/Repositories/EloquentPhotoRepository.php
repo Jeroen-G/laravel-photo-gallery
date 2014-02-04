@@ -21,7 +21,7 @@ class EloquentPhotoRepository implements PhotoRepository {
 
 	public function findByAlbumId($albumId)
 	{
-		return Photo::where('album_id', '=', $albumId);
+		return Photo::where('album_id', '=', $albumId)->paginate(10);
 	}
 
 	public function create($input, $filename)

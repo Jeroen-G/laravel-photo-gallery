@@ -55,7 +55,7 @@ class GalleryController extends BaseController {
 	public function getAlbum($id)
 	{
 		$album = $this->album->findOrFail($id);
-		$albumPhotos = $this->photo->findByAlbumId($id)->paginate(10);
+		$albumPhotos = $this->photo->findByAlbumId($id);
 		//$albumPhotos = \Paginator::make($albumPhotos->toArray(), $albumPhotos->count(), 2);
 		$this->layout->content = \View::make('gallery::album', array('album' => $album, 'albumPhotos' => $albumPhotos));
 	}
