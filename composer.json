@@ -16,7 +16,8 @@
     "autoload": {
         "classmap": [
             "src/migrations",
-            "src/controllers"
+            "src/controllers",
+            "src/flickr"
         ],
         "psr-0": {
             "JeroenG\\LaravelPhotoGallery": "src/"
