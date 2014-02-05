@@ -34,6 +34,6 @@ The photos will be uploaded to the folder `public/uploads/photos/`.
 
 If you want to change the way the gallery looks, use this command:
 
-    composer update
+    php artisan view:publish jeroen-g/laravel-photo-gallery
 
 Now you can edit the views for the gallery in the `app/views/packages` directory.
