@@ -1,4 +1,4 @@
-{{ Form::open(array('url' => 'gallery/album', 'method' => 'POST')) }}
+{{ Form::open(array('route' => 'gallery.album.store', 'method' => 'POST')) }}
     <ul>
          <li>
             {{ Form::label('album_name', Lang::get('gallery::gallery.name') . ':') }}

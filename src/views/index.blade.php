@@ -9,7 +9,7 @@
                 @if ($allAlbums->count())
                     <dl class="dl-horizontal">
                 		@foreach($allAlbums as $album)
-                			<dt>{{ link_to("gallery/album/$album->album_id", $album->album_name) }}</dt>
+                			<dt>{{ link_to_route("gallery.album.show", $album->album_name, array($album->album_id)) }}</dt>
                 			<dd><blockquote class="lead">{{ $album->album_description }}</blockquote></dd>
                 		@endforeach
                     </dl>

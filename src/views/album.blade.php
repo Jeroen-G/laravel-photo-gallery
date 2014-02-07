@@ -3,9 +3,10 @@
         <div class="panel-heading clearfix">
             <b>{{ Lang::get('gallery::gallery.overview') . ' ' . Lang::choice('gallery::gallery.album', 1) . ': ' . $album->album_name }}</b>
             <div class="pull-right">
-                {{ Form::open(array('method' => 'DELETE', 'url' => array('gallery/album', $album->album_id))) }}
-            		{{ link_to("gallery/edit/album/$album->album_id", Lang::get('gallery::gallery.edit'), array('class' => 'btn btn-info')) }}
-            	    {{ Form::submit(Lang::get('gallery::gallery.delete'), array('class' => 'btn btn-danger')) }}
+                {{ Form::open(array('route' => array("gallery.album.destroy", $album->album_id))) }}
+                    {{ link_to_route("gallery.album.edit", Lang::get('gallery::gallery.edit'), array('id' => $album->album_id), array('class' => 'btn btn-info')) }}
+                    {{ Form::hidden('_method', 'DELETE') }}
+                    {{ Form::submit(Lang::get('gallery::gallery.delete'), array('class' => 'btn btn-danger')) }}
                 {{ Form::close() }}
             </div>
         </div>
@@ -17,7 +18,7 @@
                 <div class="col-md-4">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <b>{{ link_to("gallery/photo/$photo->photo_id", $photo->photo_name) }}</b>
+                            <b>{{ link_to_route("gallery.album.photo.show", $photo->photo_name, array($photo->album_id, $photo->photo_id)) }}</b>
                         </div>
                         <div class="panel-body">
                             <p class="lead indent">{{ $photo->photo_description }}</p>

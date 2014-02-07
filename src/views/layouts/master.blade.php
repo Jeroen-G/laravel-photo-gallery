@@ -22,9 +22,9 @@
                 </div>
 		    	<div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
-    		      		<li {{ (Request::is('gallery') ? 'class="active"' : '') }}>{{ link_to('gallery', 'Home') }}</li>
-    		      		<li {{ (Request::is('gallery/new/album') ? 'class="active"' : '') }}>{{ link_to('gallery/new/album', 'New album') }}</li>
-    		      		<li {{ (Request::is('gallery/new/photo') ? 'class="active"' : '') }}>{{ link_to('gallery/new/photo', 'Add photo') }}</li>
+    		      		<li {{ (Request::is('gallery') ? 'class="active"' : '') }}>{{ link_to_route('gallery', 'Home') }}</li>
+    		      		<li {{ (Request::is('gallery/album/create') ? 'class="active"' : '') }}>{{ link_to_route('gallery.album.create', 'New album') }}</li>
+    		      		<li {{ (Request::is('gallery/album/*/photo/create') ? 'class="active"' : '') }}>{{ link_to_route('gallery.album.photo.create', 'Add photo') }}</li>
     		    	</ul>
     		  	</div>
             </div>

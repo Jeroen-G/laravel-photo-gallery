@@ -1,4 +1,4 @@
-{{ Form::model($photo, array('method' => 'PUT', 'url' => array('gallery/photo', $photo->photo_id))) }}
+{{ Form::model($photo, array('method' => 'PUT', 'route' => array('gallery.album.photo.update', $photo->album_id, $photo->photo_id))) }}
     <ul>
         <li>
             {{ Form::label('photo_name', Lang::get('gallery::gallery.name') . ':') }}
@@ -22,7 +22,7 @@
 
         <li>
             {{ Form::submit(Lang::get('gallery::gallery.submit'), array('class' => 'btn btn-primary')) }}
-            {{ link_to("gallery/photo/$photo->photo_id", Lang::get('gallery::gallery.cancel'), array('class' => 'btn btn-default')) }}
+            {{ link_to_route("gallery.album.photo.show", Lang::get('gallery::gallery.cancel'), array($photo->album_id, $photo->photo_id), array('class' => 'btn btn-default')) }}
         </li>
     </ul>
 {{ Form::close() }}
