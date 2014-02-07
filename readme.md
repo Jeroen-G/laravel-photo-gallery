@@ -31,9 +31,15 @@ This will create the tables for the gallery. Now you're ready to start!
 The photos will be uploaded to the folder `public/uploads/photos/`.
 
 ### Views
-
 If you want to change the way the gallery looks, use this command:
 
     php artisan view:publish jeroen-g/laravel-photo-gallery
 
 Now you can edit the views for the gallery in the `app/views/packages` directory.
+
+### Config
+There are a few settings you could change in a configuration file. To set these values, use this command:
+
+    php artisan config:publish jeroen-g/laravel-photo-gallery
+
+The configuration file can now be found inside `app/config/packages/`
