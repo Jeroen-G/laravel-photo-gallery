@@ -119,11 +119,11 @@ class AlbumsController extends BaseController {
         {
             $this->album->update($id, $input);
 
-            return \Redirect::to('gallery.album.show', array('id' => $id));
+            return \Redirect::route('gallery.album.show', array('id' => $id));
         }
         else
         {
-        	return \Redirect::to('gallery.album.edit', array('id' => $id))
+        	return \Redirect::route('gallery.album.edit', array('id' => $id))
             ->withInput()
             ->withErrors($validation->errors)
             ->with('message', \Lang::get('gallery::gallery.errors'));
