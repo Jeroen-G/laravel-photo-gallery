@@ -1,16 +1,42 @@
 <?php namespace JeroenG\LaravelPhotoGallery\Repositories;
 
-use JeroenG\LaravelPhotoGallery\Models\Photo;
-
 class FlickrPhotoRepository implements PhotoRepository {
+
+	private $flickr;
+	private $fid;
+	
+	public function __construct()
+	{
+		$this->flickr = new \phpFlickr(\Config::get('gallery::api'), \Config::get('gallery::secret'));
+		$this->fid = \Config::get('gallery::fid');
+	}
 
 	public function all(){}
 
-	public function find($id){}
+	public function find($id)
+	{
+		return $this->flickr->photos_getInfo($id);
+	}
 
-	public function findOrFail($id){}
+	public function findOrFail($id)
+	{
+		return $this->flickr->photos_getInfo($id);
+	}
 
-	public function findByAlbumId($albumId){}
+	public function findByAlbumId($albumId)
+	{
+		$per_page = 10;
+		if(\Input::has('page'))
+		{
+			$page = \Input::get('page');
+		}
+		else
+		{
+			$page = 1;
+		}
+
+		return $this->flickr->photosets_getPhotos($albumId, null, null, $per_page, $page);
+	}
 
 	public function create($input, $filename){}
 
