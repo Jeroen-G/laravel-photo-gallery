@@ -3,6 +3,9 @@ Laravel Photo Gallery
 
 A photo gallery for Laravel 4.1
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Jeroen-G/laravel-photo-gallery/badges/quality-score.png?s=d18bf338ee3a9ea64a8347d5893b59969b8a6b21)](https://scrutinizer-ci.com/g/Jeroen-G/laravel-photo-gallery/)
+[![Latest Stable Version](https://poser.pugx.org/jeroen-g/laravel-photo-gallery/v/stable.png)](https://packagist.org/packages/jeroen-g/laravel-photo-gallery)
+
 ## Installation
 First you should install this package through Composer and edit your project's `composer.json`:
 
