@@ -3,7 +3,8 @@
 	<head>
     	<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet">
     	<style type="text/css">
-    		form ul {list-style: none};
+    		form ul {list-style: none}
+            .navbar {border-radius: 0px;}
     	</style>
     </head>
 
