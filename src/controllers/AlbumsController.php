@@ -58,12 +58,12 @@ class AlbumsController extends BaseController {
 		{
 			$this->album->create($input);
 
-			return \Redirect::to('gallery')
+			return \Redirect::route('gallery')
 			->with('flash', \Lang::get('gallery::gallery.success'));
 		}
 		else
 		{
-			return \Redirect::to('gallery/new/album')
+			return \Redirect::back()
             ->withInput()
             ->withErrors($validation->errors)
             ->with('message', \Lang::get('gallery::gallery.errors'));
