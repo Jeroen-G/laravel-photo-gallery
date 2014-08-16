@@ -67,7 +67,8 @@ class GalleryController extends BaseController {
 	public function getPhoto($id)
 	{
 		$photo = $this->photo->findOrFail($id);
-		$this->layout->content = \View::make('gallery::photo', array('photo' => $photo));
+		$tags = \JeroenG\LaravelPhotoGallery\Models\PhotosTags::where('photo_id','=',$id)->get();
+		$this->layout->content = \View::make('gallery::photo', array('photo' => $photo, 'tags' => $tags));
 	}
 
 	/**
@@ -196,6 +197,18 @@ class GalleryController extends BaseController {
 			$newPhoto->photo_path = $filename;
 			$newPhoto->album_id = $input['album_id'];
 			$newPhoto->save();
+
+			if(isset($input['tags'])&&$input['tags']!=NULL)
+			{
+				$tags = explode(',',$input['tags']);
+				foreach($tags as $tag)
+				{
+				    $t = new \JeroenG\LaravelPhotoGallery\Models\PhotosTags;
+				    $t->photo_id = $newPhoto->photo_id;
+				    $t->tag_desc = $tag;
+				    $t->save();
+				}
+			}
 
 			return \Redirect::to('gallery/album/' . $input['album_id']);
 		}
