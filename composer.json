@@ -10,7 +10,8 @@
     ],
     "keywords": ["Laravel 4", "Photo", "Gallery"],
     "require": {
-        "php": ">=5.3.0"
+        "php": ">=5.3.0",
+        "illuminate/support": "4.2.x"
     },
     "autoload": {
         "classmap": [
@@ -19,7 +20,7 @@
             "src/models"
         ],
         "psr-0": {
-            "JeroenG\\LaravelPhotoGallery": "src/"
+            "challapradyumna\\LaravelPhotoGallery": "src/"
         }
     },
     "minimum-stability": "dev"
