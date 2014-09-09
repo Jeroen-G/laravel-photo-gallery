@@ -1,7 +1,7 @@
 Laravel Photo Gallery
 =====================
 
-A photo gallery for Laravel 4.1
+A photo gallery for Laravel 4.2
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Jeroen-G/laravel-photo-gallery/badges/quality-score.png?s=d18bf338ee3a9ea64a8347d5893b59969b8a6b21)](https://scrutinizer-ci.com/g/Jeroen-G/laravel-photo-gallery/)
 [![Latest Stable Version](https://poser.pugx.org/jeroen-g/laravel-photo-gallery/v/stable.png)](https://packagist.org/packages/jeroen-g/laravel-photo-gallery)
@@ -10,8 +10,8 @@ A photo gallery for Laravel 4.1
 First you should install this package through Composer and edit your project's `composer.json`:
 
     "require": {
-		"laravel/framework": "4.1.*",
-		"jeroen-g/laravel-photo-gallery": "v1.1"
+		"laravel/framework": "4.2*",
+		"jeroen-g/laravel-photo-gallery": "v2.*"
 	}
 
 Next, update Composer via the command line:
