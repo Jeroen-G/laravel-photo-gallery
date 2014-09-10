@@ -38,7 +38,7 @@ If you want to change the way the gallery looks, use this command:
 
     php artisan view:publish jeroen-g/laravel-photo-gallery
 
-Now you can edit the views for the gallery in the `app/views/packages` directory.
+Now you can edit the views for the gallery in the `app/views/packages/jeroen-g/laravel-photo-gallery` directory.
 
 ### Config
 There are a few settings you could change in a configuration file. To set these values, use this command:
@@ -46,3 +46,24 @@ There are a few settings you could change in a configuration file. To set these 
     php artisan config:publish jeroen-g/laravel-photo-gallery
 
 The configuration file can now be found inside `app/config/packages/`
+
+### Flickr
+If you want to use the Flickr API you have to take a few extra steps:
+- Create the file `app/bindings.php` and paste this code:
+
+    ```php
+    <?php
+    $this->app->bind('Repositories\PhotoRepository', 'JeroenG\LaravelPhotoGallery\Repositories\FlickrPhotoRepository');	
+    $this->app->bind('Repositories\AlbumRepository', 'JeroenG\LaravelPhotoGallery\Repositories\FlickrAlbumRepository');
+    ```
+
+- Add this service provider to the array in `app/config/app.php`:
+
+    `'Flickering\FlickeringServiceProvider',`
+	
+- And this to the Facades array in the same file:
+
+    `'Flickering' => 'Flickering\Facades\Flickering',`
+
+- Use the command mentioned before to publish the views of the package. In the package views you will find a folder named 'flickr', place the contents of that folder in the `app/views/packages/jeroen-g/laravel-photo-gallery` folder, overwriting the existing files.
+- use the command to publish the config file for this package. Open the file and insert your Flickr ID, API key and secret.
