@@ -12,11 +12,11 @@ else {
 if(!Input::has('page') or $page == 1){ ?>
 
 	<ul class="pager">
-	  	<li class="disabled"><a href="#">&larr; Vorige</a></li>
+	  	<li class="disabled"><a href="#">&larr; Previous</a></li>
 	  	<?php if($noNext == true) { ?>
-	  	<li class="disabled"><a href="#">Volgende &rarr;</a></li>
+	  	<li class="disabled"><a href="#">Next &rarr;</a></li>
 	  	<?php } else { ?>
-	  	<li><a href="?page=2">Volgende &rarr;</a></li>
+	  	<li><a href="?page=2">Next &rarr;</a></li>
 	  	<?php } ?>
 	</ul>
 
@@ -28,11 +28,11 @@ else
 ?>
 
 	<ul class="pager">
-	  	<li><a href="?page={{$prevPage}}">&larr; Vorige</a></li>
+	  	<li><a href="?page={{$prevPage}}">&larr; Previous</a></li>
 	  	<?php if($noNext == true) { ?>
-	  	<li class="disabled"><a href="#">Volgende &rarr;</a></li>
+	  	<li class="disabled"><a href="#">Next &rarr;</a></li>
 	  	<?php } else { ?>
-	  	<li><a href="?page={{$nextPage}}">Volgende &rarr;</a></li>
+	  	<li><a href="?page={{$nextPage}}">Next &rarr;</a></li>
 	  	<?php } ?>
 	</ul>
 

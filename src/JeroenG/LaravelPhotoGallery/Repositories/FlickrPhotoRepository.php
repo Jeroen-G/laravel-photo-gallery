@@ -2,12 +2,14 @@
 
 class FlickrPhotoRepository implements PhotoRepository {
 
-	private $flickr;
 	private $fid;
 	
 	public function __construct()
 	{
-		$this->flickr = new \phpFlickr(\Config::get('gallery::api'), \Config::get('gallery::secret'));
+		// api key & secret key
+		\Flickering::handshake(\Config::get('gallery::api'), \Config::get('gallery::secret'));
+
+		// User id
 		$this->fid = \Config::get('gallery::fid');
 	}
 
@@ -15,12 +17,13 @@ class FlickrPhotoRepository implements PhotoRepository {
 
 	public function find($id)
 	{
-		return $this->flickr->photos_getInfo($id);
+		$results = \Flickering::getResultsOf('photos.getInfo', array('photo_id' => $id));
+		return $results;
 	}
 
 	public function findOrFail($id)
 	{
-		return $this->flickr->photos_getInfo($id);
+		return $this->find($id);
 	}
 
 	public function findByAlbumId($albumId)
@@ -35,7 +38,12 @@ class FlickrPhotoRepository implements PhotoRepository {
 			$page = 1;
 		}
 
-		return $this->flickr->photosets_getPhotos($albumId, null, null, $per_page, $page);
+		$results = \Flickering::getResultsOf('photosets.getPhotos', array(
+			'photoset_id' 	=>	$albumId,
+			'per_page' 		=>	$per_page,
+			'page'			=>	$page
+		));
+		return $results;
 	}
 
 	public function create($input, $filename){}

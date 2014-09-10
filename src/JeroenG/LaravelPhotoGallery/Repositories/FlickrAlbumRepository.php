@@ -2,28 +2,32 @@
 
 class FlickrAlbumRepository implements AlbumRepository {
 
-	private $flickr;
 	private $fid;
 	
 	public function __construct()
 	{
-		$this->flickr = new \phpFlickr(\Config::get('gallery::api'), \Config::get('gallery::secret'));
+		// api key & secret key
+		\Flickering::handshake(\Config::get('gallery::api'), \Config::get('gallery::secret'));
+
+		// User id
 		$this->fid = \Config::get('gallery::fid');
 	}
 
 	public function all()
 	{
-		return $this->flickr->photosets_getList($this->fid);
+		$results = \Flickering::getResultsOf('photosets.getList', array('user_id' => $this->fid));
+		return $results;
 	}
 
 	public function find($id)
 	{
-		return $this->flickr->photosets_getInfo($id);
+		$results = \Flickering::getResultsOf('photosets.getInfo', array('photoset_id' => $id));
+		return $results;
 	}
 
 	public function findOrFail($id)
 	{
-		return $this->flickr->photosets_getInfo($id);
+		return $this->find($id);
 	}
 
 	public function create($input){}
