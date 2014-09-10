@@ -1,18 +1,18 @@
-{{ Form::open(array('url' => 'gallery/album', 'method' => 'POST')) }}
-    <ul>
-         <li>
-            {{ Form::label('album_name', Lang::get('gallery::gallery.name') . ':') }}
-            {{ Form::text('album_name', null, $options = array('size'=>'50')) }}
-        </li>
+{{ Form::open(array('route' => 'gallery.album.store', 'method' => 'POST')) }}
 
-        <li>
-            {{ Form::label('album_description', Lang::get('gallery::gallery.desc') . ':') }}
-            {{ Form::text('album_description', null, $options = array('size'=>'30')) }}
-        </li>
+    <div class="form-group">
+        {{ Form::label('album_name', Lang::get('gallery::gallery.name') . ':') }}
+        {{ Form::text('album_name', null, array('class' => 'form-control')) }}
+    </div>
 
-        <li>
-            {{ Form::submit(Lang::get('gallery::gallery.submit'), array('class' => 'btn')) }}
-        </li>
-    </ul>
+    <div class="form-group">
+        {{ Form::label('album_description', Lang::get('gallery::gallery.desc') . ':') }}
+        {{ Form::text('album_description', null, array('class' => 'form-control')) }}
+    </div>
+
+    <div class="form-group">
+        {{ Form::submit(Lang::get('gallery::gallery.submit'), array('class' => 'btn btn-primary')) }}
+    </div>
+
 {{ Form::close() }}
 

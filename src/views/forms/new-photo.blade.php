@@ -1,27 +1,27 @@
-{{ Form::open(array('url' => 'gallery/photo', 'method' => 'POST', 'files' => true)) }}
-    <ul>
-        <li>
-            {{ Form::label('photo_name', Lang::get('gallery::gallery.name') . ':') }}
-            {{ Form::text('photo_name', null, $options = array('size'=>'50')) }}
-        </li>
+{{ Form::open(array('route' => 'gallery.album.photo.store', 'method' => 'POST', 'files' => true)) }}
+        
+    <div class="form-group">
+        {{ Form::label('photo_name', Lang::get('gallery::gallery.name') . ':') }}
+        {{ Form::text('photo_name', null, array('class' => 'form-control')) }}
+    </div>
 
-        <li>
-            {{ Form::label('photo_path', Lang::get('gallery::gallery.path') . ':') }}
-            {{ Form::file('photo_path') }}
-        </li>
+    <div class="form-group">
+        {{ Form::label('photo_path', Lang::get('gallery::gallery.path') . ':') }}
+        {{ Form::file('photo_path', array('class' => 'form-control')) }}
+    </div>
 
-        <li>
-            {{ Form::label('album_id', Lang::choice('gallery::gallery.album', 1) . ':') }}
-            {{ Form::select('album_id', $dropdown) }}
-        </li>
+    <div class="form-group">
+        {{ Form::label('album_id', Lang::choice('gallery::gallery.album', 1) . ':') }}
+        {{ Form::select('album_id', $dropdown, array('class' => 'form-control')) }}
+    </div>
 
-        <li>
-            {{ Form::label('photo_description', Lang::get('gallery::gallery.desc') . ':') }}
-            {{ Form::textarea('photo_description', null, $options = array('size'=>'50x5')) }}
-        </li>
+    <div class="form-group">
+        {{ Form::label('photo_description', Lang::get('gallery::gallery.desc') . ':') }}
+        {{ Form::textarea('photo_description', null, array('class' => 'form-control')) }}
+    </div>
 
-        <li>
-            {{ Form::submit(Lang::get('gallery::gallery.submit'), array('class' => 'btn')) }}
-        </li>
-    </ul>
+    <div class="form-group">
+        {{ Form::submit(Lang::get('gallery::gallery.submit'), array('class' => 'btn btn-primary')) }}
+    </div>
+
 {{ Form::close() }}

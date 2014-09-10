@@ -18,7 +18,7 @@ class LaravelPhotoGalleryServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->package('jeroen-g/laravel-photo-gallery');
+		$this->package('jeroen-g/laravel-photo-gallery', 'gallery');
 
 		// Views will first be sought in app/views/gallery before the package view is used.
 		\View::addNamespace('gallery', app_path().'/views/gallery');
@@ -37,10 +37,13 @@ class LaravelPhotoGalleryServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		$this->app->bind('gallery', function()
-        {
-            return new Gallery;
-        });
+		if (file_exists(app_path().'/bindings.php')) {
+			include app_path() . '/bindings.php';
+		}
+		else
+		{
+			include __DIR__.'/bindings.php';
+		}
 	}
 
 	/**

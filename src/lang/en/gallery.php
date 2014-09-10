@@ -26,4 +26,5 @@ return array(
 	'photo'		=>	'photo|photos',
 	'return'	=>	'Return to album',
 	'submit'	=>	'Submit',
+	'success'	=>	'The creation has been successful',
 );
