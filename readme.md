@@ -11,7 +11,7 @@ First you should install this package through Composer and edit your project's `
 
     "require": {
         "laravel/framework": "4.2.*",
-        "jeroen-g/laravel-photo-gallery": "v1.*"
+        "jeroen-g/laravel-photo-gallery": "1.*"
     }
 
 Next, update Composer via the command line:
