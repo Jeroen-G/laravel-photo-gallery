@@ -26,7 +26,7 @@ The last thing to do is to migrate:
 
     php artisan migrate --package="jeroen-g/laravel-photo-gallery"
 
-This will create the tables for the gallery. Now you're ready to start!
+This will create the tables for the gallery. Now you're ready to start! Visit `/gallery` on your host to view the Photo Gallery.
 
 ## Usage
 
