@@ -11,7 +11,7 @@ First you should install this package through Composer and edit your project's `
 
     "require": {
         "laravel/framework": "4.2.*",
-        "jeroen-g/laravel-photo-gallery": "v1.*"
+        "jeroen-g/laravel-photo-gallery": "1.*"
     }
 
 Next, update Composer via the command line:
@@ -26,7 +26,7 @@ The last thing to do is to migrate:
 
     php artisan migrate --package="jeroen-g/laravel-photo-gallery"
 
-This will create the tables for the gallery. Now you're ready to start!
+This will create the tables for the gallery. Now you're ready to start! Visit `/gallery` on your host to view the Photo Gallery.
 
 ## Usage
 
