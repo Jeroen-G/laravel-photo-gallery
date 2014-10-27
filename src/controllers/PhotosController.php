@@ -64,10 +64,11 @@ class PhotosController extends BaseController {
 		$input = \Input::all();
 
 		$validation = new Validators\Photo;
+		$strGen = new Validators\RandomStrGen;
 
 		if($validation->passes())
 		{
-			$filename = str_random(4) . \Input::file('photo_path')->getClientOriginalName();
+			$filename = $strGen->stringGenerate() .".". \Input::file('photo_path')->getClientOriginalExtension();
 			$destination = "uploads/photos/";
             $upload = \Input::file('photo_path')->move($destination, $filename);
 
