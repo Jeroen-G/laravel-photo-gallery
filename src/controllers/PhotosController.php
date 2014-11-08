@@ -68,7 +68,7 @@ class PhotosController extends BaseController {
 		if($validation->passes())
 		{
 			$filename = str_random(4) . \Input::file('photo_path')->getClientOriginalName();
-			$destination = "uploads/photos/";
+			$destination = public_path()."/uploads/photos/";
             $upload = \Input::file('photo_path')->move($destination, $filename);
 
 			if( $upload == false )
