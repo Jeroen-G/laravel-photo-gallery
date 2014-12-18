@@ -4,6 +4,7 @@ use JeroenG\LaravelPhotoGallery\Validators as Validators;
 
 class GalleryController extends BaseController {
 
+
 	/**
 	 * The album model
 	 *
@@ -27,6 +28,8 @@ class GalleryController extends BaseController {
 	 **/
 	public function __construct()
     {
+				$this->beforeFilter('auth', array('except' => 'getLogin'));
+
         $this->album = \App::make('Repositories\AlbumRepository');
         //$this->photo = \App::make('Repositories\PhotoRepository');
     }
@@ -42,7 +45,11 @@ class GalleryController extends BaseController {
 	 **/
 	public function index()
 	{
-		$allAlbums = $this->album->all();
-		$this->layout->content = \View::make('gallery::index', array('allAlbums' => $allAlbums));
+		if (Auth::check()) {
+			$allAlbums = $this->album->all();
+			$this->layout->content = \View::make('gallery::index', array('allAlbums' => $allAlbums));
+		} else {
+			return 'access denied';
+		}
 	}
 }
