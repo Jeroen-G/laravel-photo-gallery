@@ -19,6 +19,11 @@ class CreateAlbumsTable extends Migration {
 			$table->string('album_description')->nullable();
 			$table->timestamps();
 		});
+		DB::table('albums')->insert(
+	        array(
+	            'album_name' => 'Default',
+	            'album_description' => 'Default Album'
+	        ));
 	}
 
 	/**
