@@ -39,11 +39,11 @@ class PhotosController extends BaseController {
 	public function create()
 	{
 		$albumArray = $this->album->all()->toArray();
-		$dropdown[0] = '';
+		//$dropdown[0] = '';
 
-		if (empty($albumArray)) {
-			$dropdown[0] = \Lang::get('gallery::gallery.none') . \Lang::choice('gallery::gallery.album', 2);
-		}
+		// if (empty($albumArray)) {
+		// 	$dropdown[0] = \Lang::get('gallery::gallery.none') . \Lang::choice('gallery::gallery.album', 2);
+		// }
 
 		foreach ($albumArray as $album) {
 		    $dropdown[$album['album_id']] = $album['album_name'];
@@ -67,9 +67,9 @@ class PhotosController extends BaseController {
 
 		if($validation->passes())
 		{
-			$filename = str_random(4) . \Input::file('photo_path')->getClientOriginalName();
+			$filename = str_random(10).time() .".". \Input::file('photo_path')->getClientOriginalExtension();
 			$destination = "uploads/photos/";
-            $upload = \Input::file('photo_path')->move($destination, $filename);
+            		$upload = \Input::file('photo_path')->move($destination, $filename);
 
 			if( $upload == false )
 			{
