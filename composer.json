@@ -25,8 +25,8 @@
             "src/migrations",
             "src/controllers"
         ],
-        "psr-0": {
-            "JeroenG\\LaravelPhotoGallery": "src/"
+        "psr-4": {
+            "JeroenG\\LaravelPhotoGallery\\": "src/"
         }
     },
     "autoload-dev": {
