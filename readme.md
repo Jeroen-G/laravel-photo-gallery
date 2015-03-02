@@ -1,22 +1,19 @@
-Laravel Photo Gallery
-=====================
+# Laravel Photo Gallery
 
-A photo gallery for Laravel 4.2
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Jeroen-G/laravel-photo-gallery/badges/quality-score.png)](https://scrutinizer-ci.com/g/Jeroen-G/laravel-photo-gallery/)
+[![Code Coverage](https://scrutinizer-ci.com/g/Jeroen-G/laravel-photo-gallery/badges/coverage.png)](https://scrutinizer-ci.com/g/Jeroen-G/laravel-photo-gallery/)
+[![Latest Version](https://img.shields.io/github/release/jeroen-g/laravel-photo-gallery.svg?style=flat)](https://github.com/jeroen-g/laravel-photo-gallery/releases)
+[![License](https://img.shields.io/badge/License-EUPL--1.1-blue.svg?style=flat)](license.md)
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Jeroen-G/laravel-photo-gallery/badges/quality-score.png?s=d18bf338ee3a9ea64a8347d5893b59969b8a6b21)](https://scrutinizer-ci.com/g/Jeroen-G/laravel-photo-gallery/)
-[![Latest Stable Version](https://poser.pugx.org/jeroen-g/laravel-photo-gallery/v/stable.png)](https://packagist.org/packages/jeroen-g/laravel-photo-gallery)
+A photo gallery for Laravel 5.
 
 ## Installation
-First you should install this package through Composer and edit your project's `composer.json`:
 
-    "require": {
-        "laravel/framework": "4.2.*",
-        "jeroen-g/laravel-photo-gallery": "1.*"
-    }
+Via Composer
 
-Next, update Composer via the command line:
-
-    composer update
+``` bash
+$ composer require jeroen-g/laravel-photo-gallery
+```
 
 The next step is to add the service provider in `app/config/app.php`:
 
@@ -67,3 +64,15 @@ If you want to use the Flickr API you have to take a few extra steps:
 
 - Use the command mentioned before to publish the views of the package. In the package views you will find a folder named 'flickr', place the contents of that folder in the `app/views/packages/jeroen-g/laravel-photo-gallery` folder, overwriting the existing files.
 - use the command to publish the config file for this package. Open the file and insert your Flickr ID, API key and secret.
+
+## Contributing
+
+Please see [contributing.md](contributing.md) for details.
+
+## License
+
+The EU Public License. Please see [license.md](license.md) for more information.
+
+## Changelog
+
+Please see [changelog.md](changelog.md) for the changes made.
