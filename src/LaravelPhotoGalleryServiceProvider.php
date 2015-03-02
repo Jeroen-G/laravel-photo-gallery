@@ -18,16 +18,17 @@ class LaravelPhotoGalleryServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->package('jeroen-g/laravel-photo-gallery', 'gallery');
+		$this->loadViewsFrom(__DIR__.'/../../views', 'gallery');
+        $this->loadTranslationsFrom(__DIR__.'/../../lang', 'gallery');
 
-		// Views will first be sought in app/views/gallery before the package view is used.
-		\View::addNamespace('gallery', app_path().'/views/gallery');
-		\View::addNamespace('gallery', __DIR__.'/../../views');
+        $resources = realpath(__DIR__.'/../resources');
+		$this->publishes([
+            $resources.'/views' => base_path('resources/views/vendor/gallery'),
+            $resources.'/config/gallery.php' => config_path('gallery.php'),
+            __DIR__.'/../public' => public_path('gallery'),
+    	]);
 
-		// Shortcut for using the gallery language lines.
-		\Lang::addNamespace('gallery', __DIR__.'/../../lang');
-
-		include __DIR__.'/../../routes.php';
+        include $resources.'/routes.php';
 	}
 
 	/**
@@ -37,12 +38,15 @@ class LaravelPhotoGalleryServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
+		$resources = realpath(__DIR__.'/../resources');
+        $this->mergeConfigFrom($resources.'/config/gallery.php', 'gallery');
+
 		if (file_exists(app_path().'/bindings.php')) {
 			include app_path() . '/bindings.php';
 		}
 		else
 		{
-			include __DIR__.'/bindings.php';
+			include $resources.'/bindings.php';
 		}
 	}
 
@@ -53,7 +57,7 @@ class LaravelPhotoGalleryServiceProvider extends ServiceProvider {
 	 */
 	public function provides()
 	{
-		return array('gallery');
+		return ['gallery'];
 	}
 
 }
