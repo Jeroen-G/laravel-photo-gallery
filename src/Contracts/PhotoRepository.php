@@ -1,4 +1,4 @@
-<?php namespace JeroenG\LaravelPhotoGallery\Repositories;
+<?php namespace JeroenG\LaravelPhotoGallery\Contracts;
 
 interface PhotoRepository {
 	
