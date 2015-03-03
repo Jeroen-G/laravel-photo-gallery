@@ -18,10 +18,11 @@ class LaravelPhotoGalleryServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->loadViewsFrom(__DIR__.'/../../views', 'gallery');
-        $this->loadTranslationsFrom(__DIR__.'/../../lang', 'gallery');
+		$resources = realpath(__DIR__.'/../resources');
 
-        $resources = realpath(__DIR__.'/../resources');
+		$this->loadViewsFrom($resources.'/views', 'gallery');
+        $this->loadTranslationsFrom($resources.'/lang', 'gallery');
+
 		$this->publishes([
             $resources.'/views' => base_path('resources/views/vendor/gallery'),
             $resources.'/config/gallery.php' => config_path('gallery.php'),
