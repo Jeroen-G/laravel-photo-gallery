@@ -9,10 +9,10 @@
 |
 */
 
-Route::get('gallery', array('as' => 'gallery', 'uses' => 'JeroenG\LaravelPhotoGallery\Controllers\GalleryController@index'));
-
-Route::group(array('prefix' => 'gallery'), function()
+Route::get('gallery', ['as' => 'gallery', 'uses' => 'JeroenG\LaravelPhotoGallery\Controllers\GalleryController@index']);
+Route::group(['prefix' => 'gallery'], function()
 {
-	Route::resource('album', 'JeroenG\LaravelPhotoGallery\Controllers\AlbumsController', array('except' => array('index')));
-	Route::resource('album.photo', 'JeroenG\LaravelPhotoGallery\Controllers\PhotosController', array('except' => array('index')));
+    Route::resource('album', 'JeroenG\LaravelPhotoGallery\Controllers\AlbumsController', ['except' =>['index']]);
+    Route::resource('album.photo', 'JeroenG\LaravelPhotoGallery\Controllers\PhotosController', ['except' =>['index']]);
+    Route::controller('admin', 'JeroenG\LaravelPhotoGallery\Controllers\AdminController');
 });
