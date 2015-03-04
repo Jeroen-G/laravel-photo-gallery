@@ -17,7 +17,9 @@ class CreateAlbumsTable extends Migration {
 			$table->increments('album_id');
 			$table->string('album_name');
 			$table->string('album_description')->nullable();
+			$table->integer('order')->unsigned();
 			$table->timestamps();
+			$table->softDeletes();
 		});
 		DB::table('albums')->insert(
 	        array(
