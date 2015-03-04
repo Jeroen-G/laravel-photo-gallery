@@ -50,6 +50,8 @@ class LaravelPhotoGalleryServiceProvider extends ServiceProvider {
         {
             include $resources.'/bindings.php';
         }
+
+        $this->commands(['JeroenG\LaravelPhotoGallery\Console\GalleryClearCommand']);
     }
 
     /**
