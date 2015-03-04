@@ -24,7 +24,9 @@ class CreateAlbumsTable extends Migration {
 		DB::table('albums')->insert(
 	        array(
 	            'album_name' => 'Default',
-	            'album_description' => 'Default Album'
+	            'album_description' => 'Default Album',
+	            'created_at' => DB::raw('CURRENT_TIMESTAMP'),
+	            'updated_at' => DB::raw('CURRENT_TIMESTAMP'),
 	        ));
 	}
 
