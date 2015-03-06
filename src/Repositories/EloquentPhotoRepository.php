@@ -1,6 +1,9 @@
 <?php namespace JeroenG\LaravelPhotoGallery\Repositories;
 
+use Illuminate\Http\Request;
+use Illuminate\Contracts\Filesystem\Factory as Filesystem;
 use JeroenG\LaravelPhotoGallery\Models\Photo;
+use JeroenG\LaravelPhotoGallery\Contracts\PhotoRepository;
 
 class EloquentPhotoRepository implements PhotoRepository {
 	
@@ -24,12 +27,16 @@ class EloquentPhotoRepository implements PhotoRepository {
 		return Photo::where('album_id', '=', $albumId)->paginate(10);
 	}
 
-	public function create($input, $filename)
+	public function create(Request $request, Filesystem $storage)
 	{
+		$filename = str_random(10).time() .".". $request->file('photo_file')->getClientOriginalExtension();
+        $storage->put('uploads/photos/'.$filename, \File::get($request->file('photo_file')));
+
+        $input = $request->input();
 		$newPhoto = new Photo;
 		$newPhoto->photo_name = $input['photo_name'];
 		$newPhoto->photo_description = $input['photo_description'];
-		$newPhoto->photo_path = $filename;
+		$newPhoto->filename = $filename;
 		$newPhoto->album_id = $input['album_id'];
 		return $newPhoto->save();
 	}
@@ -39,48 +46,53 @@ class EloquentPhotoRepository implements PhotoRepository {
 		$photo = Photo::find($id);
 		$photo->photo_name = $input['photo_name'];
 		$photo->photo_description = $input['photo_description'];
-		$photo->photo_path = $input['photo_path'];
 		$photo->album_id = $input['album_id'];
 		$photo->touch();
 		return $photo->save();
 	}
 
-	public function delete($id)
+	public function delete($id, Filesystem $storage)
 	{
 		$photo = Photo::find($id);
-        $file = "uploads/photos/" . $photo->photo_path;
-        $this->hasDeletedDir();
-        rename($file, "uploads/photos/deleted/" . $photo->photo_path);
+        $file = "uploads/photos/".$photo->filename;
+        $this->checkDeletedDir($storage);
+        $storage->move($file, "uploads/photos/deleted/".$photo->filename);
 		return $photo->delete();
 	}
 
-	public function hasDeletedDir()
+	public function checkDeletedDir(Filesystem $storage)
 	{
-   		return is_dir("uploads/photos/deleted/") || mkdir("uploads/photos/deleted/");
+   		return $storage->exists("uploads/photos/deleted/") || $storage->makeDirectory("uploads/photos/deleted/");
 	}
 
-	public function forceDelete($id)
+	public function forceDelete($id, Filesystem $storage)
 	{
 		$photo = Photo::find($id);
-        $file = "uploads/photos/" . $photo->photo_path;
-        unlink($file);
+        if ($storage->exists("uploads/photos/deleted/".$photo->filename))
+        {
+        	$storage->delete("uploads/photos/deleted/".$photo->filename);
+        }
+        else
+        {
+        	$storage->delete("uploads/photos/".$photo->filename);
+        }
 		return $photo->forceDelete();
 	}
 
-	public function restore($id)
+	public function restore($id, Filesystem $storage)
 	{
 		$photo = Photo::withTrashed()->find($id);
-        $deletedFile = "uploads/photos/deleted/" . $photo->photo_path;
-        rename($deletedFile, "uploads/photos/" . $photo->photo_path);
+        $deletedFile = "uploads/photos/deleted/".$photo->filename;
+        $storage->move($deletedFile, "uploads/photos/".$photo->filename);
 		return $photo->restore();
 	}
 
-	public function restoreFromAlbum($albumId)
+	public function restoreFromAlbum($albumId, Filesystem $storage)
 	{
 		$albumPhotos = Photo::withTrashed()->where('album_id', $albumId)->get();
 
 		foreach ($albumPhotos as $photo) {
-			$this->restore($photo->photo_id);
+			$this->restore($photo->photo_id, $storage);
 		}
 	}
 }

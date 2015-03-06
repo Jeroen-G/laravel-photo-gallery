@@ -1,6 +1,9 @@
 <?php namespace JeroenG\LaravelPhotoGallery\Repositories;
 
+use Illuminate\Contracts\Filesystem\Factory as Filesystem;
 use JeroenG\LaravelPhotoGallery\Models\Album;
+use JeroenG\LaravelPhotoGallery\Contracts\AlbumRepository;
+use JeroenG\LaravelPhotoGallery\Contracts\PhotoRepository;
 
 class EloquentAlbumRepository implements AlbumRepository {
 	
@@ -33,35 +36,32 @@ class EloquentAlbumRepository implements AlbumRepository {
 		return $album->save();
 	}
 
-	public function delete($id)
+	public function delete($id, PhotoRepository $photos, Filesystem $storage)
 	{
 		$album = Album::find($id);
 		$albumPhotos = $album->photos;
-		$photoRepository = \App::make('Repositories\PhotoRepository');
 
 		foreach ($albumPhotos as $photo) {
-			$photoRepository->delete($photo->photo_id);
+			$photos->delete($photo->photo_id, $storage);
 		}
 		return $album->delete();
 	}
 
-	public function forceDelete($id)
+	public function forceDelete($id, PhotoRepository $photos, Filesystem $storage)
 	{
 		$album = Album::find($id);
 		$albumPhotos = $album->photos;
-		$photoRepository = \App::make('Repositories\PhotoRepository');
 
 		foreach ($albumPhotos as $photo) {
-			$photoRepository->forceDelete($photo->photo_id);
+			$photos->forceDelete($photo->photo_id, $storage);
 		}
 		return $album->forceDelete();
 	}
 
-	public function restore($id)
+	public function restore($id, PhotoRepository $photos, Filesystem $storage)
 	{
 		$album = Album::withTrashed()->find($id);
-		$photoRepository = \App::make('Repositories\PhotoRepository');
-		$photoRepository->restoreFromAlbum($id);
+		$photos->restoreFromAlbum($id, $storage);
 		return $album->restore();
 	}
 }
