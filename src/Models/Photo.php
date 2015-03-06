@@ -1,6 +1,9 @@
 <?php namespace JeroenG\LaravelPhotoGallery\Models;
 
-class Photo extends \Eloquent {
+use Illuminate\Database\Eloquent\Model;
+use JeroenG\LaravelPhotoGallery\Contracts\Photo as PhotoContract;
+
+class Photo extends Model implements PhotoContract {
     
     /**
      * The table used by this model

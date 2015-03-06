@@ -1,6 +1,9 @@
 <?php namespace JeroenG\LaravelPhotoGallery\Models;
 
-class Album extends \Eloquent {
+use Illuminate\Database\Eloquent\Model;
+use JeroenG\LaravelPhotoGallery\Contracts\Album as AlbumContract;
+
+class Album extends Model implements AlbumContract {
     
     /**
      * The table used by this model
