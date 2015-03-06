@@ -42,15 +42,7 @@ class LaravelPhotoGalleryServiceProvider extends ServiceProvider {
     {
         $resources = realpath(__DIR__.'/../resources');
         $this->mergeConfigFrom($resources.'/config/gallery.php', 'gallery');
-
-        if (file_exists(app_path().'/bindings.php')) {
-            include app_path() . '/bindings.php';
-        }
-        else
-        {
-            include $resources.'/bindings.php';
-        }
-
+        $this->bindBindings();
         $this->commands(['JeroenG\LaravelPhotoGallery\Console\GalleryClearCommand']);
     }
 
@@ -62,6 +54,14 @@ class LaravelPhotoGalleryServiceProvider extends ServiceProvider {
     public function provides()
     {
         return ['gallery'];
+    }
+
+    public function bindBindings()
+    {
+        // When using 'AlbumRepository', Laravel automatically uses the EloquentAlbumRepository
+        $this->app->bind('JeroenG\LaravelPhotoGallery\Contracts\AlbumRepository','JeroenG\LaravelPhotoGallery\Repositories\EloquentAlbumRepository');
+        // The same for Photos
+        $this->app->bind('JeroenG\LaravelPhotoGallery\Contracts\PhotoRepository', 'JeroenG\LaravelPhotoGallery\Repositories\EloquentPhotoRepository');
     }
 
 }
