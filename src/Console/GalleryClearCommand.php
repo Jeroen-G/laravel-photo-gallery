@@ -1,18 +1,21 @@
-<?php namespace JeroenG\LaravelPhotoGallery\Console;
+<?php
+
+namespace JeroenG\LaravelPhotoGallery\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\Factory as Filesystem;
 use JeroenG\LaravelPhotoGallery\Contracts\AlbumRepository;
 use JeroenG\LaravelPhotoGallery\Contracts\PhotoRepository;
 
-class GalleryClearCommand extends Command {
+class GalleryClearCommand extends Command
+{
 
 	/**
-	 * The console command name.
-	 *
-	 * @var string
-	 */
-	protected $name = 'gallery:clear';
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+	protected $signature = 'gallery:clear';
 
 	/**
 	 * The console command description.
@@ -39,7 +42,7 @@ class GalleryClearCommand extends Command {
 	 *
 	 * @return mixed
 	 */
-	public function fire()
+	public function handle()
 	{
 		$this->comment('Deleting photos...');
 		$allPhotos = $this->photos->all();
