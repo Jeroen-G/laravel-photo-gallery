@@ -1,9 +1,11 @@
-<?php namespace JeroenG\LaravelPhotoGallery;
+<?php
+
+namespace JeroenG\LaravelPhotoGallery;
 
 use Illuminate\Support\ServiceProvider;
 
-class LaravelPhotoGalleryServiceProvider extends ServiceProvider {
-
+class LaravelPhotoGalleryServiceProvider extends ServiceProvider
+{
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -24,13 +26,26 @@ class LaravelPhotoGalleryServiceProvider extends ServiceProvider {
         $this->loadTranslationsFrom($resources.'/lang', 'gallery');
 
         $this->publishes([
-            $resources.'/views'              => base_path('resources/views/vendor/gallery'),
-            $resources.'/config/gallery.php' => config_path('gallery.php'),
-            $resources.'/migrations'         => $this->app->databasePath().'/migrations',
-            __DIR__.'/../public'             => public_path('gallery'),
-        ]);
+            $resources.'/views' => base_path('resources/views/vendor/gallery')
+        ], 'views');
 
-        include $resources.'/routes.php';
+        $this->publishes([
+            $resources.'/config/gallery.php' => config_path('gallery.php')
+        ], 'config');
+
+        $this->publishes([
+            $resources.'/migrations' => $this->app->databasePath().'/migrations',
+        ], 'migrations');
+
+        $this->publishes([
+            $resources.'/assets' => public_path('vendor/gallery'),
+        ], 'assets');
+
+        if(config('gallery.routes')) {
+            if (! $this->app->routesAreCached()) {
+                require $resources.'/routes.php';
+            }
+        }
     }
 
     /**
