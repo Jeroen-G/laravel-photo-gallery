@@ -1,8 +1,11 @@
-<?php namespace JeroenG\LaravelPhotoGallery\Controllers;
+<?php
+
+namespace JeroenG\LaravelPhotoGallery\Controllers;
 
 use JeroenG\LaravelPhotoGallery\Validators as Validators;
 
-class GalleryController extends BaseController {
+class GalleryController extends BaseController
+{
 
 	/**
 	 * The album model
