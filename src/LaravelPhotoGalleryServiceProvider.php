@@ -73,10 +73,19 @@ class LaravelPhotoGalleryServiceProvider extends ServiceProvider
 
     public function bindBindings()
     {
-        // When using 'AlbumRepository', Laravel automatically uses the EloquentAlbumRepository
-        $this->app->bind('JeroenG\LaravelPhotoGallery\Contracts\AlbumRepository','JeroenG\LaravelPhotoGallery\Repositories\EloquentAlbumRepository');
-        // The same for Photos
-        $this->app->bind('JeroenG\LaravelPhotoGallery\Contracts\PhotoRepository', 'JeroenG\LaravelPhotoGallery\Repositories\EloquentPhotoRepository');
+        // Bind the facade
+        $this->app->bind('gallery', function(){
+            return new Services\GalleryService();
+        });
+
+        if(config('gallery.driver') == 'eloquent') {
+            // When using 'AlbumRepository', Laravel automatically uses the EloquentAlbumRepository
+            $this->app->bind('JeroenG\LaravelPhotoGallery\Contracts\AlbumRepository','JeroenG\LaravelPhotoGallery\Repositories\EloquentAlbumRepository');
+            // The same for Photos
+            $this->app->bind('JeroenG\LaravelPhotoGallery\Contracts\PhotoRepository', 'JeroenG\LaravelPhotoGallery\Repositories\EloquentPhotoRepository');
+        } else {
+            throw new \Exception("Invalid gallery driver.");
+        }
     }
 
 }
