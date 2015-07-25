@@ -74,17 +74,35 @@ class LaravelPhotoGalleryServiceProvider extends ServiceProvider
     public function bindBindings()
     {
         // Bind the facade
-        $this->app->bind('gallery', function(){
-            return new Services\GalleryService();
+        $this->app->bind('gallery', function() {
+            $photo = $this->app->make('JeroenG\LaravelPhotoGallery\Contracts\PhotoAdapter');
+            $album = $this->app->make('JeroenG\LaravelPhotoGallery\Contracts\AlbumAdapter');
+            $user = $this->app->make('JeroenG\LaravelPhotoGallery\Contracts\UserAdapter');
+            $tag = $this->app->make('JeroenG\LaravelPhotoGallery\Contracts\TagAdapter');
+            return new Services\GalleryService($album, $photo, $user, $tag);
         });
 
-        if(config('gallery.driver') == 'eloquent') {
+        // Bind the adapters
+        if(config('gallery.adapter') == 'eloquent') {
             // When using 'AlbumRepository', Laravel automatically uses the EloquentAlbumRepository
-            $this->app->bind('JeroenG\LaravelPhotoGallery\Contracts\AlbumRepository','JeroenG\LaravelPhotoGallery\Repositories\EloquentAlbumRepository');
+            $this->app->bind('JeroenG\LaravelPhotoGallery\Contracts\AlbumAdapter','JeroenG\LaravelPhotoGallery\Adapters\Eloquent\EloquentAlbumAdapter');
             // The same for Photos
-            $this->app->bind('JeroenG\LaravelPhotoGallery\Contracts\PhotoRepository', 'JeroenG\LaravelPhotoGallery\Repositories\EloquentPhotoRepository');
+            $this->app->bind('JeroenG\LaravelPhotoGallery\Contracts\PhotoAdapter', 'JeroenG\LaravelPhotoGallery\Adapters\Eloquent\EloquentPhotoAdapter');
+            // And for Users
+            $this->app->bind('JeroenG\LaravelPhotoGallery\Contracts\UserAdapter', 'JeroenG\LaravelPhotoGallery\Adapters\Eloquent\EloquentUserAdapter');
+            // And Tags
+            $this->app->bind('JeroenG\LaravelPhotoGallery\Contracts\TagAdapter', 'JeroenG\LaravelPhotoGallery\Adapters\Eloquent\EloquentTagAdapter');
+        } elseif (config('gallery.adapter') == 'memory') {
+            // When using 'AlbumRepository', Laravel automatically uses the EloquentAlbumRepository
+            $this->app->bind('JeroenG\LaravelPhotoGallery\Contracts\AlbumAdapter','JeroenG\LaravelPhotoGallery\Adapters\InMemory\InMemoryAlbumAdapter');
+            // The same for Photos
+            $this->app->bind('JeroenG\LaravelPhotoGallery\Contracts\PhotoAdapter', 'JeroenG\LaravelPhotoGallery\Adapters\InMemory\InMemoryPhotoAdapter');
+            // And for Users
+            $this->app->bind('JeroenG\LaravelPhotoGallery\Contracts\UserAdapter', 'JeroenG\LaravelPhotoGallery\Adapters\InMemory\InMemoryUserAdapter');
+            // And Tags
+            $this->app->bind('JeroenG\LaravelPhotoGallery\Contracts\TagAdapter', 'JeroenG\LaravelPhotoGallery\Adapters\InMemory\InMemoryTagAdapter');
         } else {
-            throw new \Exception("Invalid gallery driver.");
+            throw new \Exception("Invalid gallery adapter.");
         }
     }
 
