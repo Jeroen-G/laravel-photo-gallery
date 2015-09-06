@@ -16,4 +16,9 @@ trait Mappable
         }
         return $this;
     }
+
+    public function toArray()
+    {
+        return $this->metadata;
+    }
 }

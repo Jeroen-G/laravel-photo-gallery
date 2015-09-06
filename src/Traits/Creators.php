@@ -36,7 +36,7 @@ trait Creators
             'description' => $faker->sentence(3),
             'file' => $faker->imageUrl(640, 480),
             'size' => '640x480',
-            'album' => $faker->unique()->randomDigitNotNull()
+            'album_id' => $faker->unique()->randomDigitNotNull()
         ];
         if(!is_null($data)) {
             foreach ($data as $key => $value) {
