@@ -11,6 +11,7 @@ interface AlbumAdapter
     public function findHidden($id);
     public function findByAttribute(array $attribute);
     public function add(Album $album);
+    public function update(Album $album);
     public function save(Album $album);
     public function hide(Album $album);
     public function restore(Album $album);
