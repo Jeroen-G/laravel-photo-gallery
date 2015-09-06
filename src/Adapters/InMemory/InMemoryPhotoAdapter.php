@@ -36,7 +36,7 @@ class InMemoryPhotoAdapter implements PhotoAdapter
 
     public function findByAlbumId($albumId)
     {
-        return $this->findByAttribute(['album' => $albumId]);
+        return $this->findByAttribute(['album_id' => $albumId]);
     }
 
     public function findByAttribute(array $attribute)
@@ -60,8 +60,12 @@ class InMemoryPhotoAdapter implements PhotoAdapter
 
     public function save(Photo $photo)
     {
-        $new = $this->photos[$photo->getId()] = $photo;
-        return $new;
+        return $this->photos[$photo->getId()] = $photo;
+    }
+
+    public function update(Photo $photo)
+    {
+        return $this->photos[$photo->getId()] = $photo;
     }
 
     public function hide(Photo $photo)

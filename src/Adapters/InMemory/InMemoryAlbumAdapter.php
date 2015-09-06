@@ -55,8 +55,12 @@ class InMemoryAlbumAdapter implements AlbumAdapter
 
     public function save(Album $album)
     {
-        $new = $this->albums[$album->getId()] = $album;
-        return $new;
+        return $this->albums[$album->getId()] = $album;
+    }
+
+    public function update(Album $album)
+    {
+        return $this->albums[$album->getId()] = $album;
     }
 
     public function hide(Album $album)
