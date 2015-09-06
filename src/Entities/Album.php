@@ -29,6 +29,11 @@ class Album implements Contracts\Album
         return $this->metadata['description'];
     }
 
+    public function getOrder()
+    {
+        return $this->metadata['order'];
+    }
+
     public function getMetadata($attribute)
     {
         return $this->metadata[$attribute];
@@ -56,6 +61,15 @@ class Album implements Contracts\Album
     public function addPhoto(Contracts\Photo $photo)
     {
         $this->photos[$photo->getId()] = $photo;
+    }
+
+    public function removePhotos($data)
+    {
+        if (is_array($data)) {
+            foreach ($data as $photo) {
+                $this->removePhoto($photo);
+            }
+        }
     }
 
     public function removePhoto(Contracts\Photo $photo)

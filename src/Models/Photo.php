@@ -1,9 +1,11 @@
-<?php namespace JeroenG\LaravelPhotoGallery\Models;
+<?php
+
+namespace JeroenG\LaravelPhotoGallery\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use JeroenG\LaravelPhotoGallery\Contracts\Photo as PhotoContract;
 
-class Photo extends Model implements PhotoContract {
+class Photo extends Model
+{
     
     /**
      * The table used by this model
@@ -13,20 +15,6 @@ class Photo extends Model implements PhotoContract {
     protected $table = 'photos';
 
     /**
-     * The primary key
-     *
-     * @var string
-     **/
-    protected $primaryKey = 'photo_id';
-
-    /**
-     * The fields that are guarded cannot be mass assigned
-     *
-     * @var array
-     **/
-    protected $guarded = array();
-
-    /**
     *  Enabling soft deleting
     *
     *  @var boolean
@@ -34,11 +22,18 @@ class Photo extends Model implements PhotoContract {
      protected $softDelete = true;
 
     /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
+
+    /**
      * When this model is updated, the updated_at timestamp of the album is also changed
      *
      * @var array
      **/
-    protected $touches = array('Album');
+    protected $touches = array('album');
 
     /**
      * Defining the relationship, a photo belongs to an album

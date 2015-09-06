@@ -39,7 +39,7 @@ class Photo implements Contracts\Photo
 
     public function getAlbum()
     {
-        return $this->metadata['album'];
+        return $this->metadata['album_id'];
     }
 
     public function getMetadata($attribute)
