@@ -14,7 +14,7 @@ class PhotoEntityTest extends PHPUnit_Framework_TestCase
             'description' => 'Profile picture',
             'file' => 'images/profiles/user13.jpg',
             'size' => '50x50',
-            'album' => 20,
+            'album_id' => 20,
             'extra' => 'Metadata'
         ]);
         

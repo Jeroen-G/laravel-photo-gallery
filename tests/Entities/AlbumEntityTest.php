@@ -14,12 +14,14 @@ class AlbumEntityTest extends PHPUnit_Framework_TestCase
             'id' => 1,
             'name' => 'First Album',
             'description' => 'Hello World!',
+            'order' => 4,
             'extra' => 'Metadata'
         ]);
         
         $this->assertEquals($album->getId(), 1);
         $this->assertEquals($album->getName(), 'First Album');
         $this->assertEquals($album->getDescription(), 'Hello World!');
+        $this->assertEquals($album->getOrder(), 4);
         $this->assertTrue($album->metadataContains('extra'));
         $this->assertEquals($album->getMetadata('extra'), 'Metadata');
     }
@@ -50,6 +52,20 @@ class AlbumEntityTest extends PHPUnit_Framework_TestCase
         $photos = $album->getPhotos();
 
         $array = [$photo1->getId() => $photo1, $photo2->getId() => $photo2];
+        $this->assertEquals($photos->toArray(), $array);
+    }
+
+    public function testRemovePhoto()
+    {
+        $album = $this->createAlbum(null, false);
+        $photo1 = $this->createPhoto(null, false);
+        $photo2 = $this->createPhoto(null, false);
+        $photo3 = $this->createPhoto(null, false);
+        $album->addPhotos([$photo1, $photo2, $photo3]);
+        $album->removePhotos([$photo1, $photo3]);
+        $photos = $album->getPhotos();
+
+        $array = [$photo2->getId() => $photo2];
         $this->assertEquals($photos->toArray(), $array);
     }
 }

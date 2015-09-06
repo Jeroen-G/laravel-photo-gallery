@@ -46,9 +46,12 @@ class PhotoAdapterTest extends PHPUnit_Framework_TestCase
         $photo = $this->createPhoto();
         $this->photos->hide($photo);
         $search = $this->photos->find($photo->getId());
-        $this->assertFalse($search, $photo);
         $searchHidden = $this->photos->findHidden($photo->getId());
+        $searchHiddenFalse = $this->photos->findHidden($photo->getId()+1);
+        
+        $this->assertFalse($search, $photo);
         $this->assertEquals($searchHidden, $photo);
+        $this->assertFalse($searchHiddenFalse, $photo);
     }
 
     public function testRestoreHiddenPhoto()
@@ -71,9 +74,24 @@ class PhotoAdapterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($search, $photo);
     }
 
+    public function testUpdate()
+    {
+        $photo = $this->createPhoto();
+        $photo->edit(['description' => 'What an experience!']);
+        $this->photos->update($photo);
+        $search = $this->photos->find($photo->getId());
+        $this->assertEquals($search, $photo);
+    }
+
     public function testDelete()
     {
         $photo = $this->createPhoto();
+        $this->photos->delete($photo);
+        $search = $this->photos->find($photo->getId());
+        $this->assertFalse($search, $photo);
+
+        $photo = $this->createPhoto();
+        $this->photos->hide($photo);
         $this->photos->delete($photo);
         $search = $this->photos->find($photo->getId());
         $this->assertFalse($search, $photo);

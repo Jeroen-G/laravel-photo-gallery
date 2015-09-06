@@ -39,9 +39,12 @@ class AlbumAdapterTest extends PHPUnit_Framework_TestCase
         $album = $this->createAlbum();
         $this->albums->hide($album);
         $search = $this->albums->find($album->getId());
-        $this->assertFalse($search, $album);
         $searchHidden = $this->albums->findHidden($album->getId());
+        $searchHiddenFalse = $this->albums->findHidden($album->getId()+1);
+        
+        $this->assertFalse($search, $album);
         $this->assertEquals($searchHidden, $album);
+        $this->assertFalse($searchHiddenFalse, $album);
     }
 
     public function testRestoreHiddenAlbum()
@@ -64,9 +67,24 @@ class AlbumAdapterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($search, $album);
     }
 
+    public function testUpdate()
+    {
+        $album = $this->createAlbum();
+        $album->rename('New Album');
+        $this->albums->update($album);
+        $search = $this->albums->find($album->getId());
+        $this->assertEquals($search, $album);
+    }
+
     public function testDelete()
     {
         $album = $this->createAlbum();
+        $this->albums->delete($album);
+        $search = $this->albums->find($album->getId());
+        $this->assertFalse($search, $album);
+
+        $album = $this->createAlbum();
+        $this->albums->hide($album);
         $this->albums->delete($album);
         $search = $this->albums->find($album->getId());
         $this->assertFalse($search, $album);
