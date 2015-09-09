@@ -3,23 +3,18 @@
 namespace JeroenG\LaravelPhotoGallery\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Album extends Model
 {
-    
+    use SoftDeletes;
+
     /**
      * The table used by this model
      *
      * @var string
      **/
     protected $table = 'albums';
-
-    /**
-    *  Enabling soft deleting
-    *
-    *  @var boolean
-    **/
-     protected $softDelete = true;
 
     /**
      * The attributes that should be mutated to dates.
