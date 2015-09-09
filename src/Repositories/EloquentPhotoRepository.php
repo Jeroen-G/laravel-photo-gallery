@@ -3,7 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Filesystem\Factory as Filesystem;
 use JeroenG\LaravelPhotoGallery\Models\Photo;
-use JeroenG\LaravelPhotoGallery\Contracts\PhotoRepository;
 
 class EloquentPhotoRepository implements PhotoRepository {
 	

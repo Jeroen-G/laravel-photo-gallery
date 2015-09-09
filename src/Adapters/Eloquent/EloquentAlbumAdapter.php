@@ -2,35 +2,55 @@
 
 namespace JeroenG\LaravelPhotoGallery\Adapters\Eloquent;
 
-use JeroenG\LaravelPhotoGallery\Model\Album;
+use Illuminate\Support\Collection;
+use JeroenG\LaravelPhotoGallery\Models\Album;
 use JeroenG\LaravelPhotoGallery\Entities as Entity;
 use JeroenG\LaravelPhotoGallery\Contracts\AlbumAdapter;
+use JeroenG\LaravelPhotoGallery\Contracts\PhotoAdapter;
 
 class EloquentAlbumAdapter implements AlbumAdapter
 {
+    private $photoAdapter;
+
+    public function __construct(PhotoAdapter $photoAdapter)
+    {
+        $this->photoAdapter = $photoAdapter;
+    }
+
     public function all()
     {
-        return Album::all();
+        $collection = [];
+        $all = Album::all();
+        foreach ($all as $album) {
+            $collection[$album->id] = $this->fromEloquent($album);
+        }
+        return Collection::make($collection);
     }
 
     public function find($id)
     {
-        return Album::find($id);
+        $album = Album::findOrFail($id);
+        if($album) return $this->fromEloquent($album);
     }
 
     public function findHidden($id)
     {
-        return Album::onlyTrashed()->where('id', $id)->get();
+        $album = Album::onlyTrashed()->where('id', $id)->get();
+        if($album) return $this->fromEloquent($album);
     }
 
     public function findByAttribute(array $attribute)
     {
-        return Album::where(function($query) {
+        $collection = [];
+        $all = Album::where(function($query) {
             foreach ($attribute as $att => $value) {
                 $query->where($att, $value);
             }
-        })
-        ->get();
+        })->get();
+        foreach ($all as $album) {
+            $collection[$album->id] = $this->fromEloquent($album);
+        }
+        return Collection::make($collection)->keyBy('id');
     }
 
     public function add(Entity\Album $album)
@@ -46,7 +66,7 @@ class EloquentAlbumAdapter implements AlbumAdapter
     {
         $data = $album->toArray();
         if(array_key_exists('id', $data)) {
-            return $this->update($data);
+            return $this->update($album);
         } else {
             return $this->toEloquent($data)->save();
         }
@@ -54,11 +74,19 @@ class EloquentAlbumAdapter implements AlbumAdapter
 
     public function update(Entity\Album $album)
     {
-        $data = $album;
+        $data = $album->toArray();
         $album = Album::find($data['id']);
-        foreach ($data as $key => $value) {
-            $album->$key = $value;
+        $album->name = $data['name'];
+        $album->description = $data['description'];
+        $album->order = $data['order'];
+
+        if(isset($data['photos']))
+        {
+            foreach ($data['photos'] as $photo) {
+                $this->photoAdapter->update($photo);
+            }
         }
+
         return $album->save();
     }
 
@@ -69,6 +97,19 @@ class EloquentAlbumAdapter implements AlbumAdapter
             $album->$key = $value;
         }
         return $album;
+    }
+
+    public function fromEloquent(Album $album)
+    {
+        $entity = new Entity\Album();
+        $entity->map([
+            'id' => $album->id,
+            'name' => $album->name,
+            'description' => $album->description,
+            'order' => $album->order,
+            'photos' => $this->photoAdapter->findByAlbumId($album->id),
+        ]);
+        return $entity;
     }
 
     public function hide(Entity\Album $album)
@@ -83,6 +124,6 @@ class EloquentAlbumAdapter implements AlbumAdapter
 
     public function delete(Entity\Album $album)
     {
-        return Album::withTrashed()->where('id', $album->getId())->get()->forceDelete();
+        return Album::withTrashed()->where('id', $album->getId())->forceDelete();
     }
 }

@@ -2,7 +2,7 @@
 
 namespace JeroenG\LaravelPhotoGallery\Contracts;
 
-use Album;
+use Album as Entity;
 
 interface AlbumAdapter
 {
@@ -10,10 +10,10 @@ interface AlbumAdapter
     public function find($id);
     public function findHidden($id);
     public function findByAttribute(array $attribute);
-    public function add(Album $album);
-    public function update(Album $album);
-    public function save(Album $album);
-    public function hide(Album $album);
-    public function restore(Album $album);
-    public function delete(Album $album);
+    public function add(Entity $album);
+    public function update(Entity $album);
+    public function save(Entity $album);
+    public function hide(Entity $album);
+    public function restore(Entity $album);
+    public function delete(Entity $album);
 }

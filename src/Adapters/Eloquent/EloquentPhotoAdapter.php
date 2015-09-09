@@ -2,7 +2,8 @@
 
 namespace JeroenG\LaravelPhotoGallery\Adapters\Eloquent;
 
-use JeroenG\LaravelPhotoGallery\Model\Photo;
+use Illuminate\Support\Collection;
+use JeroenG\LaravelPhotoGallery\Models\Photo;
 use JeroenG\LaravelPhotoGallery\Entities as Entity;
 use JeroenG\LaravelPhotoGallery\Contracts\PhotoAdapter;
 
@@ -10,32 +11,43 @@ class EloquentPhotoAdapter implements PhotoAdapter
 {
     public function all()
     {
-        return Photo::all();
+        $collection = [];
+        $all = Photo::all();
+        foreach ($all as $photo) {
+            $collection[$photo->id] = $this->fromEloquent($photo);
+        }
+        return Collection::make($collection);
     }
 
     public function find($id)
     {
-        return Photo::find($id);
+        $photo = Photo::findOrFail($id);
+        if($photo) return $this->fromEloquent($photo);
     }
 
     public function findHidden($id)
     {
-        return Photo::onlyTrashed()->where('id', $id)->get();
+        $photo = Photo::onlyTrashed()->where('id', $id)->get();
+        if($photo) return $this->fromEloquent($photo);        
     }
 
     public function findByAlbumId($albumId)
     {
-        return $this->findByAttribute(['album_id', $albumId]);
+        return $this->findByAttribute(['album_id' => $albumId]);
     }
 
     public function findByAttribute(array $attribute)
     {
-        return Photo::where(function($query) {
+        $collection = [];
+        $all = Photo::where(function($query) use ($attribute) {
             foreach ($attribute as $att => $value) {
                 $query->where($att, $value);
             }
-        })
-        ->get();
+        })->get();
+        foreach ($all as $photo) {
+            $collection[$photo->id] = $this->fromEloquent($photo);
+        }
+        return Collection::make($collection);
     }
 
     public function add(Entity\Photo $photo)
@@ -45,11 +57,12 @@ class EloquentPhotoAdapter implements PhotoAdapter
 
     public function update(Entity\Photo $photo)
     {
-        $data = $photo;
+        $data = $photo->toArray();
         $photo = Photo::find($data['id']);
-        foreach ($data as $key => $value) {
-            $photo->$key = $value;
-        }
+        $photo->name = $data['name'];
+        $photo->description = $data['description'];
+        $photo->order = $data['order'];
+        $photo->album_id = $data['album_id'];
         return $photo->save();
     }
 
@@ -57,7 +70,7 @@ class EloquentPhotoAdapter implements PhotoAdapter
     {
         $data = $photo->toArray();
         if(array_key_exists('id', $data)) {
-            return $this->update($data);
+            return $this->update($photo);
         } else {
             return $this->toEloquent($data)->save();
         }
@@ -72,6 +85,20 @@ class EloquentPhotoAdapter implements PhotoAdapter
         return $photo;
     }
 
+    public function fromEloquent(Photo $photo)
+    {
+        $entity = new Entity\Photo();
+        $entity->map([
+            'id' => $photo->id,
+            'name' => $photo->name,
+            'description' => $photo->description,
+            'file' => $photo->file,
+            'size' => $photo->size,
+            'album_id' => $photo->album_id,
+        ]);
+        return $entity;
+    }
+
     public function hide(Entity\Photo $photo)
     {
         return Photo::where('id', $photo->getId())->delete();
@@ -84,7 +111,7 @@ class EloquentPhotoAdapter implements PhotoAdapter
 
     public function delete(Entity\Photo $photo)
     {
-        return Photo::withTrashed()->where('id', $photo->getId())->get()->forceDelete();
+        return Photo::withTrashed()->where('id', $photo->getId())->forceDelete();
     }
 
 }
