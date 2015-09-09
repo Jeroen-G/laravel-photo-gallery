@@ -1,48 +1,58 @@
-<!doctype html>
 <html>
-	<head>
-    	<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet">
-    	<style type="text/css">
-    		form ul {list-style: none}
-            .navbar {border-radius: 0px;}
-    	</style>
+    <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="">
+      <meta name="author" content="">
+
+      <title>Laravel Photo Gallery</title>
+
+      <!-- Bootstrap core CSS -->
+      <link href="{{ asset('vendor/gallery/css/bootstrap.min.css') }}" rel="stylesheet">
+
+      <!-- Custom styles for this template -->
+      <link href="{{ asset('vendor/gallery/css/album.css') }}" rel="stylesheet">
+
+      <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+      <script src="{{ asset('vendor/gallery/js/ie10-viewport-bug-workaround.js') }}"></script>
     </head>
 
     <body>
-    	<nav class="navbar navbar-inverse" role="navigation">
-			<div class="container-fluid">
-		    	<!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
-                  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                  </button>
-                  <a class="navbar-brand" href="#">Photo Gallery</a>
-                </div>
-		    	<div class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav">
-    		      		<li {{ (Request::is('gallery') ? 'class="active"' : '') }}>{{ link_to_route('gallery', 'Home') }}</li>
-    		      		<li {{ (Request::is('gallery/album/create') ? 'class="active"' : '') }}>{{ link_to_route('gallery.album.create', 'New album') }}</li>
-    		      		<li {{ (Request::is('gallery/album/*/photo/create') ? 'class="active"' : '') }}>{{ link_to_route('gallery.album.photo.create', 'Add photo') }}</li>
-    		    	</ul>
-    		  	</div>
-            </div>
-		</nav>
+        @include('gallery::partials.header')
 
-    	<div class="container">
-    		@if (Session::has('message'))
-            	<div class="flash alert">
-            		<p>{{ Session::get('message') }}</p>
-        		</div>
-			@endif
+        <div class="album text-muted">
+          <div class="container">
 
-    		@yield('content')
+            @if(Session::has('alertinfo'))
+              <div class="alert alert-info">
+                <p>{{ Session::get('alertinfo') }}</p>
+              </div>
+            @endif
+
+            @if(Session::has('alertsuccess'))
+              <div class="alert alert-success">
+                <p>{{ Session::get('alertsuccess') }}</p>
+              </div>
+            @endif
+
+            @if(Session::has('alertwarning'))
+              <div class="alert alert-warning">
+                <p>{{ Session::get('alertwarning') }}</p>
+              </div>
+            @endif
+
+            @if(Session::has('alertdanger'))
+              <div class="alert alert-danger">
+                <p>{{ Session::get('alertdanger') }}</p>
+              </div>
+            @endif
+
+            @yield('content')
+          </div>
         </div>
+        
+        @include('gallery::partials.footer')
 
-        <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-	</body>
-
+    </body>
 </html>

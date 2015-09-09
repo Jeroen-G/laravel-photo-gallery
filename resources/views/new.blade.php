@@ -1,23 +1,20 @@
+@extends('gallery::layouts.master')
+
 @section('content')
 
-<div class="row">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <b>{{ Lang::get('gallery::gallery.create') . ' ' . Lang::choice("gallery::gallery.$type", 1) }}</b>
-        </div>
-        <div class="panel-body">
+    @include($form)
 
-    {{ $form }}
-
-    @if ($errors->any())
+    @if (count($errors) > 0)
+        <div class="alert alert-danger" role="alert">
+            <strong>Oh snap! {{ trans('gallery::gallery.errors') }}</strong>
             <ul>
-                {{ implode('', $errors->all('<li class="error">:message</li>')) }}
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
             </ul>
-    @endif
         </div>
-    </div>
-</div>
+    @endif
 
-@stop
+@endsection
 
 

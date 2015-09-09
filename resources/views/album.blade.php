@@ -1,41 +1,26 @@
+@extends('gallery::layouts.master')
+
 @section('content')
-    <div class="panel panel-default">
-        <div class="panel-heading clearfix">
-            <b>{{ Lang::get('gallery::gallery.overview') . ' ' . Lang::choice('gallery::gallery.album', 1) . ': ' . $album->album_name }}</b>
-            <div class="pull-right">
-                {{ Form::open(array('route' => array("gallery.album.destroy", $album->album_id))) }}
-                    {{ link_to_route("gallery.album.edit", Lang::get('gallery::gallery.edit'), array('id' => $album->album_id), array('class' => 'btn btn-info')) }}
-                    {{ Form::hidden('_method', 'DELETE') }}
-                    {{ Form::submit(Lang::get('gallery::gallery.delete'), array('class' => 'btn btn-danger')) }}
-                {{ Form::close() }}
-            </div>
-        </div>
-        <div class="panel-body">
-
-        @if ($albumPhotos->count())
-            <div class="row">
-            @foreach($albumPhotos as $photo)
-                <div class="col-md-4">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <b>{{ link_to_route("gallery.album.photo.show", $photo->photo_name, array($photo->album_id, $photo->photo_id)) }}</b>
-                        </div>
-                        <div class="panel-body">
-                            <p class="lead indent">{{ $photo->photo_description }}</p>
-                        </div>
-                    </div>
-                </div>
-    		@endforeach
-            </div>
-        </div>
-        <div class="panel-footer clearfix">
-    	   <?php echo $albumPhotos->links(); ?>
-        </div>
-    	@else
-        	{{ Lang::get('gallery::gallery.none') . Lang::choice('gallery::gallery.photo', 2) }}
-            </div>
-    	@endif
-
-
-    </div>
-@stop
+<form method="POST" action="{{ route('gallery.album.destroy', ['id' => $album->getId()]) }}">
+    <input name="_method" type="hidden" value="DELETE">
+    {!! csrf_field() !!}
+    <a href="{{ route('gallery.album.edit', ['id' => $album->getId()]) }}" class="btn btn-primary">{{ trans('gallery::gallery.edit') }}</a>
+    <input class="btn btn-danger" type="submit" value="{{ trans('gallery::gallery.delete') }}">
+</form>
+<div class="row">
+  @if (count($albumPhotos))
+    @foreach($albumPhotos as $photo)
+      <div class="card">
+        <a href="{{ route('gallery.album.photo.show', ['albumId' => $photo->getAlbum(), 'photoId' => $photo->getId()]) }}"><img data-src="holder.js/100%x280/thumb"></a>
+        <p class="card-text">
+          <h3><a href="{{ route('gallery.album.photo.show', ['albumId' => $photo->getAlbum(), 'photoId' => $photo->getId()]) }}">{{$photo->getName()}}</a></h3>
+          {{ $photo->getDescription() }}</p>
+      </div>
+    @endforeach
+  @else
+  <div class="card">
+    <h3>{{ trans('gallery::gallery.none') . trans_choice('gallery::gallery.photo', 2) }}</h3>
+  </div>
+  @endif
+</div>
+@endsection
