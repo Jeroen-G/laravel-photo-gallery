@@ -17,7 +17,7 @@ return array(
 
 	'album'		=>	'album|albums',
 	'cancel'	=>	'Annuleren',
-	'create'	=>	'Toevoegen van een',
+	'create'	=>	'Nieuw|Nieuwe',
 	'desc'		=>	'Omschrijving',
 	'delete'	=>	'Verwijderen',
 	'edit'		=>	'Aanpassen',
@@ -28,6 +28,8 @@ return array(
 	'path'		=>	'Bestand',
 	'photo'		=>	'foto|foto\'s',
 	'return'	=>	'Terug naar het album',
-	'submit'	=>	'Verstuur',
+	'submit'	=>	'Opslaan',
 	'success'	=>	'Het toevoegen is gelukt',
+	'update'	=>	'Het updaten is gelukt',
+	'removal'	=>	'Het verwijderen is gelukt',
 );
