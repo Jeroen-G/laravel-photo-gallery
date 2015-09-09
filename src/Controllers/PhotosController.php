@@ -126,11 +126,10 @@ class PhotosController extends Controller
 	 */
 	public function destroy($albumId, $photoId)
 	{
-        $photo = new Entity\Photo();
-		$photo->map([
-			'id' => $photoId,
-		]);
+		$photo = \Gallery::photo()->find($photoId);
 		\Gallery::photo()->delete($photo);
+		$file = "uploads/photos/" . $photo->getFile();
+        unlink($file);
         return \Redirect::route("gallery.album.show", ['id' => $albumId])->with('alertsuccess', \Lang::get('gallery::gallery.removal'));
 	}
 }
