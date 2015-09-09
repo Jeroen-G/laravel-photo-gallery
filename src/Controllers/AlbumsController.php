@@ -2,38 +2,11 @@
 
 namespace JeroenG\LaravelPhotoGallery\Controllers;
 
-use JeroenG\LaravelPhotoGallery\Validators as Validators;
+use Illuminate\Http\Request;
+use JeroenG\LaravelPhotoGallery\Entities as Entity;
 
-class AlbumsController extends BaseController
+class AlbumsController extends Controller
 {
-
-	/**
-	 * The album model
-	 *
-	 * @var \JeroenG\LaravelPhotoGallery\Models\Album
-	 **/
-	protected $album;
-
-	/**
-	 * The photo model
-	 *
-	 * @var \JeroenG\LaravelPhotoGallery\Models\Photo
-	 **/
-	protected $photo;
-
-	/**
-	 * Instantiate the controller
-	 *
-	 * @param \JeroenG\LaravelPhotoGallery\Models\Album $album
-	 * @param \JeroenG\LaravelPhotoGallery\Models\Photo $photo
-	 * @return void
-	 **/
-	public function __construct()
-	{
-		$this->album = \App::make('Repositories\AlbumRepository');
-		$this->photo = \App::make('Repositories\PhotoRepository');
-	}
-
 	/**
 	 * Show the form for creating a new album.
 	 *
@@ -42,35 +15,32 @@ class AlbumsController extends BaseController
 	public function create()
 	{
 		$data = array('type' => 'album');
-		$this->layout->content = \View::make('gallery::new', $data)
-		->nest('form', 'gallery::forms.new-album');
+		return view('gallery::new', $data)->with('form', 'gallery::partials.new-album');
 	}
 
 	/**
 	 * Store a newly created album in storage.
 	 *
+	 * @param  $request
 	 * @return \Illuminate\View\View
 	 */
-	public function store()
+	public function store(Request $request)
 	{
-		$input = \Input::all();
+		$this->validate($request, [
+			'album_name' => 'required',
+			'album_description' => 'max:255',
+		]);
 
-		$validation = new Validators\Album;
+		$album = new Entity\Album();
+		$album->map([
+			'name' => $request->input('album_name'),
+			'description' => $request->input('album_description'),
+			'order' => 0,
+		]);
 
-		if($validation->passes())
-		{
-			$this->album->create($input);
+		\Gallery::album()->add($album);
 
-			return \Redirect::route('gallery')
-			->with('flash', \Lang::get('gallery::gallery.success'));
-		}
-		else
-		{
-			return \Redirect::back()
-            ->withInput()
-            ->withErrors($validation->errors)
-            ->with('message', \Lang::get('gallery::gallery.errors'));
-		}
+		return \Redirect::route('gallery')->with('alertsuccess', \Lang::get('gallery::gallery.creation'));
 	}
 
 	/**
@@ -81,9 +51,9 @@ class AlbumsController extends BaseController
 	 */
 	public function show($id)
 	{
-		$album = $this->album->findOrFail($id);
-		$albumPhotos = $this->photo->findByAlbumId($id);
-		$this->layout->content = \View::make('gallery::album', array('album' => $album, 'albumPhotos' => $albumPhotos));
+		$album = \Gallery::album()->find($id);
+		$albumPhotos = \Gallery::photo()->findByAlbumId($id);
+		return view('gallery::album', ['album' => $album, 'albumPhotos' => $albumPhotos]);
 	}
 
 	/**
@@ -94,16 +64,10 @@ class AlbumsController extends BaseController
 	 */
 	public function edit($id)
 	{
-		$album = $this->album->find($id);
-
-		if(is_null($id))
-		{
-			return \Redirect::to('gallery');
-		}
+		$album = \Gallery::album()->find($id);
 
 		$data = array('type' => 'album', 'album' => $album);
-		$this->layout->content = \View::make('gallery::edit', $data)
-		->nest('form', 'gallery::forms.edit-album', $data);
+		return view('gallery::edit', $data)->with('form', 'gallery::partials.edit-album');
 	}
 
 	/**
@@ -112,25 +76,24 @@ class AlbumsController extends BaseController
 	 * @param int $id Id of the album
 	 * @return \Illuminate\View\View
 	 */
-	public function update($id)
+	public function update(Request $request, $id)
 	{
-		$input = \Input::except('_method');
+		$this->validate($request, [
+			'album_name' => 'required',
+			'album_description' => 'max:255',
+		]);
 
-        $validation = new Validators\Album($input);
+		$album = new Entity\Album();
+		$album->map([
+			'id' => $id,
+			'name' => $request->input('album_name'),
+			'description' => $request->input('album_description'),
+			'order' => 0,
+		]);
 
-        if ($validation->passes())
-        {
-            $this->album->update($id, $input);
+		\Gallery::album()->save($album);
 
-            return \Redirect::route('gallery.album.show', array('id' => $id));
-        }
-        else
-        {
-        	return \Redirect::route('gallery.album.edit', array('id' => $id))
-            ->withInput()
-            ->withErrors($validation->errors)
-            ->with('message', \Lang::get('gallery::gallery.errors'));
-        }
+		return \Redirect::route('gallery.album.show', ['id' => $id])->with('alertsuccess', \Lang::get('gallery::gallery.update'));
 	}
 
 	/**
@@ -141,7 +104,11 @@ class AlbumsController extends BaseController
 	 */
 	public function destroy($id)
 	{
-		$this->album->delete($id);
-        return \Redirect::route("gallery");
+		$album = new Entity\Album();
+		$album->map([
+			'id' => $id,
+		]);
+		\Gallery::album()->delete($album);
+        return \Redirect::route("gallery")->with('alertsuccess', \Lang::get('gallery::gallery.removal'));
 	}
 }

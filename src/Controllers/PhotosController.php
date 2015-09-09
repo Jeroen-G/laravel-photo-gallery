@@ -2,38 +2,11 @@
 
 namespace JeroenG\LaravelPhotoGallery\Controllers;
 
-use JeroenG\LaravelPhotoGallery\Validators as Validators;
+use Illuminate\Http\Request;
+use JeroenG\LaravelPhotoGallery\Entities as Entity;
 
-class PhotosController extends BaseController
+class PhotosController extends Controller
 {
-
-	/**
-	 * The album model
-	 *
-	 * @var \JeroenG\LaravelPhotoGallery\Models\Album
-	 **/
-	protected $album;
-
-	/**
-	 * The photo model
-	 *
-	 * @var \JeroenG\LaravelPhotoGallery\Models\Photo
-	 **/
-	protected $photo;
-
-	/**
-	 * Instantiate the controller
-	 *
-	 * @param \JeroenG\LaravelPhotoGallery\Models\Album $album
-	 * @param \JeroenG\LaravelPhotoGallery\Models\Photo $photo
-	 * @return void
-	 **/
-	public function __construct()
-	{
-		$this->album = \App::make('Repositories\AlbumRepository');
-		$this->photo = \App::make('Repositories\PhotoRepository');
-	}
-
 	/**
 	 * Show the form for creating a new photo.
 	 *
@@ -41,56 +14,46 @@ class PhotosController extends BaseController
 	 */
 	public function create()
 	{
-		$albumArray = $this->album->all()->toArray();
-		//$dropdown[0] = '';
-
-		// if (empty($albumArray)) {
-		// 	$dropdown[0] = \Lang::get('gallery::gallery.none') . \Lang::choice('gallery::gallery.album', 2);
-		// }
-
+		$albumArray = \Gallery::album()->all()->toArray();
 		foreach ($albumArray as $album) {
-		    $dropdown[$album['album_id']] = $album['album_name'];
+		    $dropdown[$album->getId()] = $album->getName();
 		}
-
 		$data = array('type' => 'photo', 'dropdown' => $dropdown);
-		$this->layout->content = \View::make('gallery::new', $data)
-		->nest('form', 'gallery::forms.new-photo', $data);
+		return view('gallery::new', $data)->with('form', 'gallery::partials.new-photo');
 	}
 
 	/**
 	 * Store a newly created photo in storage.
 	 *
+	 * @param  $request
+	 * @param  $filesystem
 	 * @return \Illuminate\View\View
 	 */
-	public function store()
+	public function store(Request $request)
 	{
-		$input = \Input::all();
+		$this->validate($request, [
+			'photo_path' => 'image|required',
+    		'album_id' => 'required',
+            'photo_name' => 'required',
+            'photo_description' => 'max:255',
+		]);
 
-		$validation = new Validators\Photo;
+		$file = $request->file('photo_path');
+		$filename = str_random(10).time().$file->getClientOriginalName();
+		$file->move(public_path('uploads/photos'), $filename);
 
-		if($validation->passes())
-		{
-			$filename = str_random(10).time() .".". \Input::file('photo_path')->getClientOriginalExtension();
-			$destination = "uploads/photos/";
-            		$upload = \Input::file('photo_path')->move($destination, $filename);
+		$photo = new Entity\Photo();
+		$photo->map([
+			'file' => $filename,
+    		'album_id' => $request->input('album_id'),
+            'name' => $request->input('photo_name'),
+            'description' => $request->input('photo_description'),
+            'order' => 0,
+		]);
 
-			if( $upload == false )
-			{
-				return \Redirect::to('gallery.album.photo.create')
-       			->withInput()
-       			->withErrors($validation->errors)
-       			->with('message', \Lang::get('gallery::gallery.errors'));
-			}
+		\Gallery::photo()->add($photo);
 
-			$this->photo->create($input, $filename);
-			return \Redirect::route("gallery.album.show", array('id' => $input['album_id']));
-		}
-		else
-		{
-			return \Redirect::route('gallery.album.photo.create')
-            ->withInput()->withErrors($validation->errors)
-            ->with('message', \Lang::get('gallery::gallery.errors'));
-		}
+		return \Redirect::route('gallery')->with('alertsuccess', \Lang::get('gallery::gallery.creation'));
 	}
 
 	/**
@@ -102,8 +65,8 @@ class PhotosController extends BaseController
 	 */
 	public function show($albumId, $photoId)
 	{
-		$photo = $this->photo->findOrFail($photoId);
-		$this->layout->content = \View::make('gallery::photo', array('photo' => $photo));
+		$photo = \Gallery::photo()->find($photoId);
+		return view('gallery::photo', ['photo' => $photo]);
 	}
 
 	/**
@@ -115,16 +78,14 @@ class PhotosController extends BaseController
 	 */
 	public function edit($albumId, $photoId)
 	{
-		$photo = $this->photo->find($photoId);
-
-		$albumArray = $this->album->all()->toArray();
+		$photo = \Gallery::photo()->find($photoId);
+		$albumArray = \Gallery::album()->all()->toArray();
 		foreach ($albumArray as $album) {
-		    $dropdown[$album['album_id']] = $album['album_name'];
+		    $dropdown[$album->getId()] = $album->getName();
 		}
-
 		$data = array('type' => 'photo', 'dropdown' => $dropdown, 'photo' => $photo);
-		$this->layout->content = \View::make('gallery::edit', $data)
-		->nest('form', 'gallery::forms.edit-photo', $data);
+		return view('gallery::edit', $data)->with('form', 'gallery::partials.edit-photo');
+
 	}
 
 	/**
@@ -134,26 +95,27 @@ class PhotosController extends BaseController
 	 * @param int $photoId Id of the photo
 	 * @return \Illuminate\View\View
 	 */
-	public function update($albumId, $photoId)
+	public function update(Request $request, $albumId, $photoId)
 	{
-		$input = \Input::except('_method');
+        $this->validate($request, [
+    		'album_id' => 'required',
+            'photo_name' => 'required',
+            'photo_description' => 'max:255',
+		]);
 
-        $validation = new Validators\Photo($input);
+		$photo = new Entity\Photo();
+		$photo->map([
+			'id' => $photoId,
+    		'album_id' => $request->input('album_id'),
+            'name' => $request->input('photo_name'),
+            'description' => $request->input('photo_description'),
+            'order' => 0,
+		]);
 
-        if ($validation->passes())
-        {
-            $this->photo->update($photoId, $input);
+		\Gallery::photo()->save($photo);
 
-            return \Redirect::route("gallery.album.photo.show", array('albumId' => $albumId, 'photoId' => $photoId));
-        }
-        else
-        {
-        	return \Redirect::route("gallery.album.photo.edit", array('albumId' => $albumId, 'photoId' => $photoId))
-            ->withInput()
-            ->withErrors($validation->errors)
-            ->with('message', \Lang::get('gallery::gallery.errors'));
-        }
-	}
+		return \Redirect::route('gallery.album.photo.show', ['albumId' => $albumId, 'photoId' => $photoId])->with('alertsuccess', \Lang::get('gallery::gallery.update'));
+		}
 
 	/**
 	 * Remove the specified photo from the database.
@@ -164,7 +126,11 @@ class PhotosController extends BaseController
 	 */
 	public function destroy($albumId, $photoId)
 	{
-        $this->photo->delete($photoId);
-        return \Redirect::route("gallery.album.show", array('id' => $albumId));
+        $photo = new Entity\Photo();
+		$photo->map([
+			'id' => $photoId,
+		]);
+		\Gallery::photo()->delete($photo);
+        return \Redirect::route("gallery.album.show", ['id' => $albumId])->with('alertsuccess', \Lang::get('gallery::gallery.removal'));
 	}
 }
