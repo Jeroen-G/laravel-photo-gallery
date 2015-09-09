@@ -3,9 +3,8 @@
 namespace JeroenG\LaravelPhotoGallery\Console;
 
 use Illuminate\Console\Command;
-use Illuminate\Contracts\Filesystem\Factory as Filesystem;
-use JeroenG\LaravelPhotoGallery\Contracts\AlbumRepository;
-use JeroenG\LaravelPhotoGallery\Contracts\PhotoRepository;
+use JeroenG\LaravelPhotoGallery\Contracts\AlbumAdapter;
+use JeroenG\LaravelPhotoGallery\Contracts\PhotoAdapter;
 
 class GalleryClearCommand extends Command
 {
@@ -29,12 +28,11 @@ class GalleryClearCommand extends Command
 	 *
 	 * @return void
 	 */
-	public function __construct(AlbumRepository $albums, PhotoRepository $photos, Filesystem $storage)
+	public function __construct(AlbumAdapter $albums, PhotoAdapter $photos)
 	{
 		parent::__construct();
 		$this->photos = $photos;
 		$this->albums = $albums;
-		$this->storage = $storage;
 	}
 
 	/**
@@ -47,15 +45,15 @@ class GalleryClearCommand extends Command
 		$this->comment('Deleting photos...');
 		$allPhotos = $this->photos->all();
 		foreach ($allPhotos as $photo) {
-			$this->photos->forceDelete($photo->photo_id, $this->storage);
+			$this->photos->delete($photo);
 		}
 
 		$this->comment('Deleting albums...');
 		$allAlbums = $this->albums->all();
 		foreach ($allAlbums as $album) {
-			if($album->album_id != 1)
+			if($album->getId() != 1)
 			{
-				$this->albums->forceDelete($album->album_id, $this->photos, $this->storage);
+				$this->albums->delete($album);
 			}
 		}
 
