@@ -24,4 +24,24 @@ class GalleryService
     {
         return 'hi';
     }
+
+    public function album()
+    {
+        return $this->adapters['album'];
+    }
+
+     public function photo()
+    {
+        return $this->adapters['photo'];
+    }
+
+     public function user()
+    {
+        return $this->adapters['user'];
+    }
+
+     public function tag()
+    {
+        return $this->adapters['tag'];
+    }
 }
