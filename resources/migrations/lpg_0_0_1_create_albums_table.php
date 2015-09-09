@@ -14,17 +14,17 @@ class CreateAlbumsTable extends Migration {
 	{
 		Schema::create('albums', function(Blueprint $table)
 		{
-			$table->increments('album_id');
-			$table->string('album_name');
-			$table->string('album_description')->nullable();
+			$table->increments('id');
+			$table->string('name');
+			$table->string('description')->nullable();
 			$table->integer('order')->unsigned();
 			$table->timestamps();
 			$table->softDeletes();
 		});
 		DB::table('albums')->insert(
 	        array(
-	            'album_name' => 'Default',
-	            'album_description' => 'Default Album',
+	            'name' => 'Default',
+	            'description' => 'Default Album',
 	            'created_at' => DB::raw('CURRENT_TIMESTAMP'),
 	            'updated_at' => DB::raw('CURRENT_TIMESTAMP'),
 	        ));
