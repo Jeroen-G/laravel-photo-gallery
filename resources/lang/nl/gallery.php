@@ -29,7 +29,7 @@ return array(
 	'photo'		=>	'foto|foto\'s',
 	'return'	=>	'Terug naar het album',
 	'submit'	=>	'Opslaan',
-	'success'	=>	'Het toevoegen is gelukt',
+	'creation'	=>	'Het toevoegen is gelukt',
 	'update'	=>	'Het updaten is gelukt',
 	'removal'	=>	'Het verwijderen is gelukt',
 );
