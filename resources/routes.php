@@ -14,5 +14,4 @@ Route::group(['prefix' => 'gallery'], function()
 {
     Route::resource('album', 'JeroenG\LaravelPhotoGallery\Controllers\AlbumsController', ['except' =>['index']]);
     Route::resource('album.photo', 'JeroenG\LaravelPhotoGallery\Controllers\PhotosController', ['except' =>['index']]);
-    Route::controller('admin', 'JeroenG\LaravelPhotoGallery\Controllers\AdminController');
 });
