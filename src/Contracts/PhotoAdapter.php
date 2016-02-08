@@ -2,7 +2,7 @@
 
 namespace JeroenG\LaravelPhotoGallery\Contracts;
 
-use Photo as Entity;
+use JeroenG\LaravelPhotoGallery\Contracts\Photo as Entity;
 
 interface PhotoAdapter
 {

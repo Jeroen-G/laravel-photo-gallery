@@ -4,6 +4,7 @@ namespace JeroenG\LaravelPhotoGallery\Adapters\Eloquent;
 
 use Illuminate\Support\Collection;
 use JeroenG\LaravelPhotoGallery\Models\Photo;
+use JeroenG\LaravelPhotoGallery\Contracts as Contract;
 use JeroenG\LaravelPhotoGallery\Entities as Entity;
 use JeroenG\LaravelPhotoGallery\Contracts\PhotoAdapter;
 
@@ -50,12 +51,12 @@ class EloquentPhotoAdapter implements PhotoAdapter
         return Collection::make($collection);
     }
 
-    public function add(Entity\Photo $photo)
+    public function add(Contract\Photo $photo)
     {
         return $this->save($photo);
     }
 
-    public function update(Entity\Photo $photo)
+    public function update(Contract\Photo $photo)
     {
         $data = $photo->toArray();
         $photo = Photo::find($data['id']);
@@ -66,7 +67,7 @@ class EloquentPhotoAdapter implements PhotoAdapter
         return $photo->save();
     }
 
-    public function save(Entity\Photo $photo)
+    public function save(Contract\Photo $photo)
     {
         $data = $photo->toArray();
         if(array_key_exists('id', $data)) {
@@ -99,17 +100,17 @@ class EloquentPhotoAdapter implements PhotoAdapter
         return $entity;
     }
 
-    public function hide(Entity\Photo $photo)
+    public function hide(Contract\Photo $photo)
     {
         return Photo::where('id', $photo->getId())->delete();
     }
 
-    public function restore(Entity\Photo $photo)
+    public function restore(Contract\Photo $photo)
     {
         return Photo::withTrashed()->where('id', $photo->getId())->restore();
     }
 
-    public function delete(Entity\Photo $photo)
+    public function delete(Contract\Photo $photo)
     {
         return Photo::withTrashed()->where('id', $photo->getId())->forceDelete();
     }
