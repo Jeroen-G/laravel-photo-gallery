@@ -4,6 +4,7 @@ namespace JeroenG\LaravelPhotoGallery\Controllers;
 
 use Illuminate\Http\Request;
 use JeroenG\LaravelPhotoGallery\Entities as Entity;
+use JeroenG\LaravelPhotoGallery\Facades\Gallery;
 
 class PhotosController extends Controller
 {
@@ -14,7 +15,7 @@ class PhotosController extends Controller
 	 */
 	public function create()
 	{
-		$albumArray = \Gallery::album()->all()->toArray();
+		$albumArray = Gallery::album()->all()->toArray();
 		foreach ($albumArray as $album) {
 		    $dropdown[$album->getId()] = $album->getName();
 		}
@@ -65,7 +66,7 @@ class PhotosController extends Controller
 	 */
 	public function show($albumId, $photoId)
 	{
-		$photo = \Gallery::photo()->find($photoId);
+		$photo =Gallery::photo()->find($photoId);
 		return view('gallery::photo', ['photo' => $photo]);
 	}
 
@@ -78,8 +79,8 @@ class PhotosController extends Controller
 	 */
 	public function edit($albumId, $photoId)
 	{
-		$photo = \Gallery::photo()->find($photoId);
-		$albumArray = \Gallery::album()->all()->toArray();
+		$photo =Gallery::photo()->find($photoId);
+		$albumArray =Gallery::album()->all()->toArray();
 		foreach ($albumArray as $album) {
 		    $dropdown[$album->getId()] = $album->getName();
 		}
@@ -126,7 +127,7 @@ class PhotosController extends Controller
 	 */
 	public function destroy($albumId, $photoId)
 	{
-		$photo = \Gallery::photo()->find($photoId);
+		$photo =Gallery::photo()->find($photoId);
 		\Gallery::photo()->delete($photo);
 		$file = "uploads/photos/" . $photo->getFile();
         unlink($file);
