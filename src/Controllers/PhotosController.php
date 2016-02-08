@@ -52,7 +52,7 @@ class PhotosController extends Controller
             'order' => 0,
 		]);
 
-		\Gallery::photo()->add($photo);
+		Gallery::photo()->add($photo);
 
 		return \Redirect::route('gallery')->with('alertsuccess', \Lang::get('gallery::gallery.creation'));
 	}
@@ -66,7 +66,7 @@ class PhotosController extends Controller
 	 */
 	public function show($albumId, $photoId)
 	{
-		$photo =Gallery::photo()->find($photoId);
+		$photo = Gallery::photo()->find($photoId);
 		return view('gallery::photo', ['photo' => $photo]);
 	}
 
@@ -79,8 +79,8 @@ class PhotosController extends Controller
 	 */
 	public function edit($albumId, $photoId)
 	{
-		$photo =Gallery::photo()->find($photoId);
-		$albumArray =Gallery::album()->all()->toArray();
+		$photo = Gallery::photo()->find($photoId);
+		$albumArray = Gallery::album()->all()->toArray();
 		foreach ($albumArray as $album) {
 		    $dropdown[$album->getId()] = $album->getName();
 		}
@@ -113,7 +113,7 @@ class PhotosController extends Controller
             'order' => 0,
 		]);
 
-		\Gallery::photo()->save($photo);
+		Gallery::photo()->save($photo);
 
 		return \Redirect::route('gallery.album.photo.show', ['albumId' => $albumId, 'photoId' => $photoId])->with('alertsuccess', \Lang::get('gallery::gallery.update'));
 		}
@@ -127,8 +127,8 @@ class PhotosController extends Controller
 	 */
 	public function destroy($albumId, $photoId)
 	{
-		$photo =Gallery::photo()->find($photoId);
-		\Gallery::photo()->delete($photo);
+		$photo = Gallery::photo()->find($photoId);
+		Gallery::photo()->delete($photo);
 		$file = "uploads/photos/" . $photo->getFile();
         unlink($file);
         return \Redirect::route("gallery.album.show", ['id' => $albumId])->with('alertsuccess', \Lang::get('gallery::gallery.removal'));
