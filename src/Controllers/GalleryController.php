@@ -2,6 +2,8 @@
 
 namespace JeroenG\LaravelPhotoGallery\Controllers;
 
+use JeroenG\LaravelPhotoGallery\Facades\Gallery;
+
 class GalleryController extends Controller
 {
     /**
@@ -11,7 +13,7 @@ class GalleryController extends Controller
      */
 	public function index()
 	{
-		$allAlbums = \Gallery::album()->all();
+		$allAlbums = Gallery::album()->all();
 		return view('gallery::index', ['allAlbums' => $allAlbums]);
 	}
 }
