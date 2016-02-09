@@ -4,6 +4,7 @@ namespace JeroenG\LaravelPhotoGallery\Controllers;
 
 use Illuminate\Http\Request;
 use JeroenG\LaravelPhotoGallery\Entities as Entity;
+use JeroenG\LaravelPhotoGallery\Facades\Gallery;
 
 class AlbumsController extends Controller
 {
@@ -38,7 +39,7 @@ class AlbumsController extends Controller
 			'order' => 0,
 		]);
 
-		\Gallery::album()->add($album);
+		Gallery::album()->add($album);
 
 		return \Redirect::route('gallery')->with('alertsuccess', \Lang::get('gallery::gallery.creation'));
 	}
@@ -51,8 +52,8 @@ class AlbumsController extends Controller
 	 */
 	public function show($id)
 	{
-		$album = \Gallery::album()->find($id);
-		$albumPhotos = \Gallery::photo()->findByAlbumId($id);
+		$album = Gallery::album()->find($id);
+		$albumPhotos = Gallery::photo()->findByAlbumId($id);
 		return view('gallery::album', ['album' => $album, 'albumPhotos' => $albumPhotos]);
 	}
 
@@ -64,7 +65,7 @@ class AlbumsController extends Controller
 	 */
 	public function edit($id)
 	{
-		$album = \Gallery::album()->find($id);
+		$album = Gallery::album()->find($id);
 
 		$data = array('type' => 'album', 'album' => $album);
 		return view('gallery::edit', $data)->with('form', 'gallery::partials.edit-album');
@@ -91,7 +92,7 @@ class AlbumsController extends Controller
 			'order' => 0,
 		]);
 
-		\Gallery::album()->save($album);
+		Gallery::album()->save($album);
 
 		return \Redirect::route('gallery.album.show', ['id' => $id])->with('alertsuccess', \Lang::get('gallery::gallery.update'));
 	}
@@ -108,7 +109,7 @@ class AlbumsController extends Controller
 		$album->map([
 			'id' => $id,
 		]);
-		\Gallery::album()->delete($album);
+		Gallery::album()->delete($album);
         return \Redirect::route("gallery")->with('alertsuccess', \Lang::get('gallery::gallery.removal'));
 	}
 }

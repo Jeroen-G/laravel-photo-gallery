@@ -5,6 +5,7 @@ namespace JeroenG\LaravelPhotoGallery\Adapters\Eloquent;
 use Illuminate\Support\Collection;
 use JeroenG\LaravelPhotoGallery\Models\Album;
 use JeroenG\LaravelPhotoGallery\Entities as Entity;
+use JeroenG\LaravelPhotoGallery\Contracts as Contract;
 use JeroenG\LaravelPhotoGallery\Contracts\AlbumAdapter;
 use JeroenG\LaravelPhotoGallery\Contracts\PhotoAdapter;
 
@@ -42,7 +43,7 @@ class EloquentAlbumAdapter implements AlbumAdapter
     public function findByAttribute(array $attribute)
     {
         $collection = [];
-        $all = Album::where(function($query) {
+        $all = Album::where(function($query) use ($attribute) {
             foreach ($attribute as $att => $value) {
                 $query->where($att, $value);
             }
@@ -53,7 +54,7 @@ class EloquentAlbumAdapter implements AlbumAdapter
         return Collection::make($collection)->keyBy('id');
     }
 
-    public function add(Entity\Album $album)
+    public function add(Contract\Album $album)
     {
         $photos = $album->getPhotos()->toArray();
         foreach ($photos as $photo) {
@@ -62,7 +63,7 @@ class EloquentAlbumAdapter implements AlbumAdapter
         return $this->save($album);
     }
 
-    public function save(Entity\Album $album)
+    public function save(Contract\Album $album)
     {
         $data = $album->toArray();
         if(array_key_exists('id', $data)) {
@@ -72,7 +73,7 @@ class EloquentAlbumAdapter implements AlbumAdapter
         }
     }
 
-    public function update(Entity\Album $album)
+    public function update(Contract\Album $album)
     {
         $data = $album->toArray();
         $album = Album::find($data['id']);
@@ -112,17 +113,17 @@ class EloquentAlbumAdapter implements AlbumAdapter
         return $entity;
     }
 
-    public function hide(Entity\Album $album)
+    public function hide(Contract\Album $album)
     {
         return Album::where('id', $album->getId())->delete();
     }
     
-    public function restore(Entity\Album $album)
+    public function restore(Contract\Album $album)
     {
         return Album::withTrashed()->where('id', $album->getId())->restore();
     }
 
-    public function delete(Entity\Album $album)
+    public function delete(Contract\Album $album)
     {
         return Album::withTrashed()->where('id', $album->getId())->forceDelete();
     }
